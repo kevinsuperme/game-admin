@@ -1,6 +1,6 @@
-# Fantastic Admin 文档中心
+# Super Admin 文档中心
 
-欢迎使用 Fantastic Admin 文档!本文档采用统一的编号和分类体系,方便您快速查找所需信息。
+欢迎使用 Super Admin 文档!本文档采用统一的编号和分类体系,方便您快速查找所需信息。
 
 ## 📚 文档导航
 

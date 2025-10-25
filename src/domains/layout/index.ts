@@ -53,7 +53,7 @@ export const DEFAULT_LAYOUT_CONFIG = {
     show: true,
     height: 48,
     fixed: false,
-    content: '© 2024 Fantastic Admin',
+    content: '© 2024 Super Admin',
   },
   menu: {
     accordion: false,
@@ -68,7 +68,7 @@ export const DEFAULT_LAYOUT_CONFIG = {
   },
   watermark: {
     enabled: false,
-    content: 'Fantastic Admin',
+    content: 'Super Admin',
     color: 'rgba(0, 0, 0, 0.1)',
     fontSize: 16,
     fontFamily: 'Arial',
