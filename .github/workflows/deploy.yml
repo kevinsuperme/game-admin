@@ -34,6 +34,9 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: List build output
+        run: ls -la dist-example/
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
@@ -42,6 +45,9 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
           vercel-args: '--prod'
+          vercel-org: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }}
 
       - name: Notify deployment status
         if: always()
