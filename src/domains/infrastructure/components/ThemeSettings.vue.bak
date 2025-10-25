@@ -1,0 +1,325 @@
+// 主题设置组件
+<template>
+  <div class="theme-settings">
+    <el-drawer
+      v-model="visible"
+      title="主题设置"
+      direction="rtl"
+      size="320px"
+      :before-close="handleClose"
+    >
+      <div class="theme-settings-content">
+        <!-- 主题模式 -->
+        <div class="setting-section">
+          <h3 class="setting-title">主题模式</h3>
+          <div class="setting-options">
+            <div
+              v-for="mode in themeModes"
+              :key="mode.value"
+              class="option-item"
+              :class="{ active: themeConfig.mode === mode.value }"
+              @click="setThemeMode(mode.value)"
+            >
+              <div class="option-icon">
+                <el-icon>
+                  <component :is="mode.icon" />
+                </el-icon>
+              </div>
+              <div class="option-label">{{ mode.label }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 颜色方案 -->
+        <div class="setting-section">
+          <h3 class="setting-title">颜色方案</h3>
+          <div class="color-schemes">
+            <div
+              v-for="scheme in colorSchemes"
+              :key="scheme.value"
+              class="color-scheme-item"
+              :class="{ active: themeConfig.colorScheme === scheme.value }"
+              @click="setColorScheme(scheme.value)"
+            >
+              <div
+                class="color-preview"
+                :style="{ backgroundColor: scheme.primaryColor }"
+              ></div>
+              <div class="color-label">{{ scheme.label }}</div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- 字体大小 -->
+        <div class="setting-section">
+          <h3 class="setting-title">字体大小</h3>
+          <el-radio-group v-model="themeConfig.fontSize" @change="setFontSize">
+            <el-radio-button label="small">小</el-radio-button>
+            <el-radio-button label="medium">中</el-radio-button>
+            <el-radio-button label="large">大</el-radio-button>
+          </el-radio-group>
+        </div>
+
+        <!-- 圆角 -->
+        <div class="setting-section">
+          <h3 class="setting-title">圆角大小</h3>
+          <el-radio-group v-model="themeConfig.borderRadius" @change="setBorderRadius">
+            <el-radio-button label="none">无</el-radio-button>
+            <el-radio-button label="small">小</el-radio-button>
+            <el-radio-button label="medium">中</el-radio-button>
+            <el-radio-button label="large">大</el-radio-button>
+          </el-radio-group>
+        </div>
+
+        <!-- 布局设置 -->
+        <div class="setting-section">
+          <h3 class="setting-title">布局设置</h3>
+          <div class="setting-options">
+            <div class="option-item">
+              <span>紧凑模式</span>
+              <el-switch
+                v-model="themeConfig.compactMode"
+                @change="setCompactMode"
+              />
+            </div>
+            <div class="option-item">
+              <span>侧边栏折叠</span>
+              <el-switch
+                v-model="themeConfig.sidebarCollapsed"
+                @change="setSidebarCollapsed"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 动画设置 -->
+        <div class="setting-section">
+          <h3 class="setting-title">动画设置</h3>
+          <div class="setting-options">
+            <div class="option-item">
+              <span>启用动画</span>
+              <el-switch
+                v-model="themeConfig.animationsEnabled"
+                @change="setAnimationsEnabled"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 可访问性 -->
+        <div class="setting-section">
+          <h3 class="setting-title">可访问性</h3>
+          <div class="setting-options">
+            <div class="option-item">
+              <span>高对比度</span>
+              <el-switch
+                v-model="themeConfig.highContrast"
+                @change="setHighContrast"
+              />
+            </div>
+            <div class="option-item">
+              <span>减少动画</span>
+              <el-switch
+                v-model="themeConfig.reducedMotion"
+                @change="setReducedMotion"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="setting-actions">
+          <el-button @click="resetTheme">重置为默认</el-button>
+          <el-button type="primary" @click="handleClose">确定</el-button>
+        </div>
+      </div>
+    </el-drawer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { ElMessage } from 'element-plus';
+import { Sunny, Moon, Monitor } from '@element-plus/icons-vue';
+import { useTheme, useColorScheme } from '../composables/useTheme';
+import type { ThemeMode, ColorScheme } from '../services/themeService';
+
+// 定义组件属性
+interface Props {
+  modelValue: boolean;
+}
+}
+
+// 定义组件事件
+interface Emits {
+  (e: 'update:modelValue', value: boolean): void;
+}
+
+// 使用组合式函数
+const { themeConfig, systemTheme = 'light', setThemeMode, setFontSize, setBorderRadius, setCompactMode, setSidebarCollapsed, setAnimationsEnabled, setHighContrast, setReducedMotion, resetTheme } = useTheme();
+const { colorSchemes, setColorScheme } = useColorScheme();
+
+// 添加getSystemTheme函数
+const getSystemTheme = () => systemTheme;
+
+// 组件属性和事件
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+});
+
+const emit = defineEmits<Emits>();
+
+// 抽屉可见性
+const visible = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
+});
+
+// 主题模式选项
+const themeModes = [
+  { value: 'light' as ThemeMode, label: '浅色', icon: Sunny },
+  { value: 'dark' as ThemeMode, label: '深色', icon: Moon },
+  { value: 'auto' as ThemeMode, label: '跟随系统', icon: Monitor },
+];
+
+// 设置主题模式
+const handleSetThemeMode = (mode: ThemeMode) => {
+  setThemeMode(mode);
+};
+
+// 设置颜色方案
+const handleSetColorScheme = (scheme: string) => {
+  setColorScheme(scheme as any);
+};
+
+// 设置字体大小
+const handleSetFontSize = (size: 'small' | 'medium' | 'large') => {
+  setFontSize(size);
+};
+
+// 设置圆角
+const handleSetBorderRadius = (radius: 'none' | 'small' | 'medium' | 'large') => {
+  setBorderRadius(radius);
+};
+
+// 关闭抽屉
+const handleClose = () => {
+  visible.value = false;
+};
+</script>
+
+<style scoped>
+.theme-settings {
+  position: relative;
+}
+
+.theme-settings-content {
+  padding: 20px;
+}
+
+.setting-section {
+  margin-bottom: 30px;
+}
+
+.setting-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: var(--el-text-color-primary);
+}
+
+.setting-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.option-item:hover {
+  background-color: var(--el-bg-color-overlay);
+}
+
+.option-item.active {
+  background-color: var(--el-color-primary-light-10);
+  color: var(--el-color-primary);
+}
+
+.option-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.option-label {
+  font-size: 14px;
+}
+
+.color-schemes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.color-scheme-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.color-scheme-item:hover {
+  background-color: var(--el-bg-color-overlay);
+}
+
+.color-scheme-item.active {
+  background-color: var(--el-color-primary-light-10);
+  color: var(--el-color-primary);
+}
+
+.color-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.color-label {
+  font-size: 14px;
+}
+
+.setting-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .setting-options,
+  .color-schemes {
+    justify-content: center;
+  }
+
+  .option-item {
+    min-width: 60px;
+  }
+
+  .setting-actions {
+    flex-direction: column;
+  }
+}
+</style>
