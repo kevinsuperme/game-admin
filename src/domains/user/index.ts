@@ -102,7 +102,7 @@ export const USER_CONFIG = {
   // 活动记录默认数量
   defaultActivityLimit: 10,
   // 用户偏好设置持久化键名
-  preferencesPersistKey: 'fantastic-admin-user-preferences',
+  preferencesPersistKey: 'super-admin-user-preferences',
   // 用户资料页面路径
   profilePath: '/user/profile',
   // 用户偏好设置页面路径

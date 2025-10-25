@@ -1,6 +1,6 @@
 <script setup lang="ts">
 function upgrade() {
-  window.open('https://fantastic-admin.hurui.me/buy.html', '_blank')
+  window.open('https://super-admin.hurui.me/buy.html', '_blank')
 }
 </script>
 

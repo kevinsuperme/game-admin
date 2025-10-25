@@ -5,10 +5,10 @@ if (import.meta.env.PROD) {
   const copyright_main_style = `${copyright_common_style} background: #e24329;`
   const copyright_sub_style = `${copyright_common_style} background: #707070;`
   if ((navigator.language).toLowerCase() === 'zh-cn') {
-    console.info('%c由%cYour Company%c驱动', copyright_sub_style, copyright_main_style, copyright_sub_style, '\nhttps://your-company-website.com')
+    console.info('%c由%cSuper Company%c驱动', copyright_sub_style, copyright_main_style, copyright_sub_style, '\nhttps://your-company-website.com')
   }
   else {
-    console.info('%cPowered by%cYour Company', copyright_sub_style, copyright_main_style, '\nhttps://your-company-website.com')
+    console.info('%cPowered by%cSuper Company', copyright_sub_style, copyright_main_style, '\nhttps://your-company-website.com')
   }
 }
 

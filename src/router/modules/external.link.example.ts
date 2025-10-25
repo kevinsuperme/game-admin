@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
       name: 'linkExampleWindowGitee',
       meta: {
         title: 'Gitee 仓库',
-        link: 'https://gitee.com/fantastic-admin/basic',
+        link: 'https://gitee.com/super-admin/basic',
       },
     },
     {
@@ -28,7 +28,7 @@ const routes: RouteRecordRaw = {
       name: 'linkExampleWindowGithub',
       meta: {
         title: 'Github 仓库',
-        link: 'https://github.com/fantastic-admin/basic',
+        link: 'https://github.com/super-admin/basic',
       },
     },
   ],

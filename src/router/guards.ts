@@ -258,7 +258,7 @@ function setupKeepAlive(router: Router) {
         }
         else {
           // turbo-console-disable-next-line
-          console.warn('[Fantastic-admin] 该页面组件未设置组件名，会导致缓存失效，请检查')
+          console.warn('[super-admin] 该页面组件未设置组件名，会导致缓存失效，请检查')
         }
       }
     }

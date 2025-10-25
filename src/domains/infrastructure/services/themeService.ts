@@ -47,7 +47,7 @@ const defaultThemeConfig: ThemeConfig = {
 
 // 主题服务类
 class ThemeService {
-  private themeConfig = useStorage<ThemeConfig>('fantastic-admin-theme', defaultThemeConfig);
+  private themeConfig = useStorage<ThemeConfig>('super-admin-theme', defaultThemeConfig);
   private systemTheme = ref<ThemeMode>('light');
   private deviceType = ref<DeviceType>('desktop');
   private screenWidth = ref(0);

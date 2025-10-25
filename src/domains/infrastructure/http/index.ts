@@ -16,7 +16,7 @@ const httpClient = axios.create({
 httpClient.interceptors.request.use(
   (config) => {
     // 添加认证token
-    const token = localStorage.getItem('fantastic-admin-token');
+    const token = localStorage.getItem('super-admin-token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -71,7 +71,7 @@ httpClient.interceptors.response.use(
     // 处理401未授权错误
     if (error.response?.status === 401) {
       // 清除本地token
-      localStorage.removeItem('fantastic-admin-token');
+      localStorage.removeItem('super-admin-token');
       
       // 重定向到登录页面
       window.location.href = '/login';

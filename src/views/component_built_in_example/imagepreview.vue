@@ -9,19 +9,19 @@ import { useFaImagePreview } from '@/ui/components/FaImagePreview'
 const { open } = useFaImagePreview()
 
 function openSingle() {
-  open('https://fantastic-admin.hurui.me/logo.svg')
+  open('https://super-admin.hurui.me/logo.svg')
 }
 
 function openMulti() {
   open([
-    'https://fantastic-admin.hurui.me/logo.svg',
+    'https://super-admin.hurui.me/logo.svg',
     'https://fantastic-mobile.hurui.me/logo.png',
   ])
 }
 
 function openMulti2() {
   open([
-    'https://fantastic-admin.hurui.me/logo.svg',
+    'https://super-admin.hurui.me/logo.svg',
     'https://fantastic-mobile.hurui.me/logo.png',
   ], 1)
 }
@@ -32,7 +32,7 @@ function openMulti2() {
     <FaPageHeader title="图片预览" description="FaImagePreview" />
     <FaPageMain>
       <div class="space-x-4">
-        <FaImagePreview src="https://fantastic-admin.hurui.me/logo.svg" />
+        <FaImagePreview src="https://super-admin.hurui.me/logo.svg" />
         <FaImagePreview src="http://www.baidu.com" class="size-25" />
         <FaImagePreview src="http://www.baidu.com">
           <template #error>

@@ -68,21 +68,21 @@ export interface LayoutService {
 export class LayoutServiceImpl implements LayoutService {
   // 布局配置相关
   getLayoutConfig(): LayoutConfig {
-    const savedConfig = storageService.get(STORAGE_KEYS.LAYOUT_CONFIG || 'fantastic-admin-layout-config');
+    const savedConfig = storageService.get(STORAGE_KEYS.LAYOUT_CONFIG || 'super-admin-layout-config');
     return savedConfig || this.getDefaultLayoutConfig();
   }
 
   async updateLayoutConfig(config: Partial<LayoutConfig>): Promise<void> {
     const currentConfig = this.getLayoutConfig();
     const newConfig = { ...currentConfig, ...config };
-    storageService.set(STORAGE_KEYS.LAYOUT_CONFIG || 'fantastic-admin-layout-config', newConfig);
+    storageService.set(STORAGE_KEYS.LAYOUT_CONFIG || 'super-admin-layout-config', newConfig);
     
     // 发送布局配置更新事件
     eventBus.emit('layout:config-updated', newConfig);
   }
 
   async resetLayoutConfig(): Promise<void> {
-    storageService.remove(STORAGE_KEYS.LAYOUT_CONFIG || 'fantastic-admin-layout-config');
+    storageService.remove(STORAGE_KEYS.LAYOUT_CONFIG || 'super-admin-layout-config');
     
     // 发送布局配置重置事件
     eventBus.emit('layout:config-reset');
@@ -90,21 +90,21 @@ export class LayoutServiceImpl implements LayoutService {
 
   // 主题相关
   getThemeConfig(): ThemeConfig {
-    const savedConfig = storageService.get(STORAGE_KEYS.THEME_CONFIG || 'fantastic-admin-theme-config');
+    const savedConfig = storageService.get(STORAGE_KEYS.THEME_CONFIG || 'super-admin-theme-config');
     return savedConfig || this.getDefaultThemeConfig();
   }
 
   async updateThemeConfig(config: Partial<ThemeConfig>): Promise<void> {
     const currentConfig = this.getThemeConfig();
     const newConfig = { ...currentConfig, ...config };
-    storageService.set(STORAGE_KEYS.THEME_CONFIG || 'fantastic-admin-theme-config', newConfig);
+    storageService.set(STORAGE_KEYS.THEME_CONFIG || 'super-admin-theme-config', newConfig);
     
     // 发送主题配置更新事件
     eventBus.emit('theme:config-updated', newConfig);
   }
 
   async resetThemeConfig(): Promise<void> {
-    storageService.remove(STORAGE_KEYS.THEME_CONFIG || 'fantastic-admin-theme-config');
+    storageService.remove(STORAGE_KEYS.THEME_CONFIG || 'super-admin-theme-config');
     
     // 发送主题配置重置事件
     eventBus.emit('theme:config-reset');
@@ -118,7 +118,7 @@ export class LayoutServiceImpl implements LayoutService {
 
   // 语言相关
   getCurrentLanguage(): string {
-    return storageService.get(STORAGE_KEYS.LANGUAGE || 'fantastic-admin-language') || 'zh-CN';
+    return storageService.get(STORAGE_KEYS.LANGUAGE || 'super-admin-language') || 'zh-CN';
   }
 
   getLanguageConfigs(): LanguageConfig[] {
@@ -129,7 +129,7 @@ export class LayoutServiceImpl implements LayoutService {
   }
 
   async setLanguage(language: string): Promise<void> {
-    storageService.set(STORAGE_KEYS.LANGUAGE || 'fantastic-admin-language', language);
+    storageService.set(STORAGE_KEYS.LANGUAGE || 'super-admin-language', language);
     
     // 发送语言变更事件
     eventBus.emit('language:changed', language);
@@ -169,7 +169,7 @@ export class LayoutServiceImpl implements LayoutService {
 
   // 标签页相关
   getTabs(): TabConfig[] {
-    return storageService.get(STORAGE_KEYS.TABS || 'fantastic-admin-tabs') || [];
+    return storageService.get(STORAGE_KEYS.TABS || 'super-admin-tabs') || [];
   }
 
   async addTab(tab: TabConfig): Promise<void> {
@@ -182,8 +182,8 @@ export class LayoutServiceImpl implements LayoutService {
     }
     
     // 保存标签页
-    storageService.set(STORAGE_KEYS.TABS || 'fantastic-admin-tabs', tabs);
-    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'fantastic-admin-active-tab', tab.key);
+    storageService.set(STORAGE_KEYS.TABS || 'super-admin-tabs', tabs);
+    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'super-admin-active-tab', tab.key);
     
     // 发送标签页添加事件
     eventBus.emit('tab:added', tab);
@@ -201,7 +201,7 @@ export class LayoutServiceImpl implements LayoutService {
     tabs.splice(index, 1);
     
     // 保存标签页
-    storageService.set(STORAGE_KEYS.TABS || 'fantastic-admin-tabs', tabs);
+    storageService.set(STORAGE_KEYS.TABS || 'super-admin-tabs', tabs);
     
     // 发送标签页关闭事件
     eventBus.emit('tab:closed', key);
@@ -212,8 +212,8 @@ export class LayoutServiceImpl implements LayoutService {
     const filteredTabs = tabs.filter(tab => tab.key === key || tab.fixed);
     
     // 保存标签页
-    storageService.set(STORAGE_KEYS.TABS || 'fantastic-admin-tabs', filteredTabs);
-    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'fantastic-admin-active-tab', key);
+    storageService.set(STORAGE_KEYS.TABS || 'super-admin-tabs', filteredTabs);
+    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'super-admin-active-tab', key);
     
     // 发送标签页关闭事件
     eventBus.emit('tab:others-closed', key);
@@ -224,10 +224,10 @@ export class LayoutServiceImpl implements LayoutService {
     const filteredTabs = tabs.filter(tab => tab.fixed);
     
     // 保存标签页
-    storageService.set(STORAGE_KEYS.TABS || 'fantastic-admin-tabs', filteredTabs);
+    storageService.set(STORAGE_KEYS.TABS || 'super-admin-tabs', filteredTabs);
     
     if (filteredTabs.length > 0) {
-      storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'fantastic-admin-active-tab', filteredTabs[0].key);
+      storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'super-admin-active-tab', filteredTabs[0].key);
     }
     
     // 发送标签页关闭事件
@@ -235,7 +235,7 @@ export class LayoutServiceImpl implements LayoutService {
   }
 
   async switchTab(key: string): Promise<void> {
-    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'fantastic-admin-active-tab', key);
+    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'super-admin-active-tab', key);
     
     // 发送标签页切换事件
     eventBus.emit('tab:switched', key);
@@ -249,7 +249,7 @@ export class LayoutServiceImpl implements LayoutService {
 
   // 通知相关
   getNotifications(): NotificationItem[] {
-    return storageService.get(STORAGE_KEYS.NOTIFICATIONS || 'fantastic-admin-notifications') || [];
+    return storageService.get(STORAGE_KEYS.NOTIFICATIONS || 'super-admin-notifications') || [];
   }
 
   async addNotification(notification: NotificationItem): Promise<void> {
@@ -257,7 +257,7 @@ export class LayoutServiceImpl implements LayoutService {
     notifications.unshift(notification);
     
     // 保存通知
-    storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'fantastic-admin-notifications', notifications);
+    storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'super-admin-notifications', notifications);
     
     // 发送通知添加事件
     eventBus.emit('notification:added', notification);
@@ -271,7 +271,7 @@ export class LayoutServiceImpl implements LayoutService {
       notification.read = true;
       
       // 保存通知
-      storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'fantastic-admin-notifications', notifications);
+      storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'super-admin-notifications', notifications);
       
       // 发送通知已读事件
       eventBus.emit('notification:read', id);
@@ -285,7 +285,7 @@ export class LayoutServiceImpl implements LayoutService {
     });
     
     // 保存通知
-    storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'fantastic-admin-notifications', notifications);
+    storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'super-admin-notifications', notifications);
     
     // 发送所有通知已读事件
     eventBus.emit('notification:all-read');
@@ -299,7 +299,7 @@ export class LayoutServiceImpl implements LayoutService {
       notifications.splice(index, 1);
       
       // 保存通知
-      storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'fantastic-admin-notifications', notifications);
+      storageService.set(STORAGE_KEYS.NOTIFICATIONS || 'super-admin-notifications', notifications);
       
       // 发送通知删除事件
       eventBus.emit('notification:removed', id);
@@ -307,7 +307,7 @@ export class LayoutServiceImpl implements LayoutService {
   }
 
   async clearNotifications(): Promise<void> {
-    storageService.remove(STORAGE_KEYS.NOTIFICATIONS || 'fantastic-admin-notifications');
+    storageService.remove(STORAGE_KEYS.NOTIFICATIONS || 'super-admin-notifications');
     
     // 发送通知清空事件
     eventBus.emit('notification:cleared');
@@ -333,7 +333,7 @@ export class LayoutServiceImpl implements LayoutService {
     const newConfig = { ...currentConfig, ...config };
     
     // 保存搜索配置
-    storageService.set(STORAGE_KEYS.SEARCH_CONFIG || 'fantastic-admin-search-config', newConfig);
+    storageService.set(STORAGE_KEYS.SEARCH_CONFIG || 'super-admin-search-config', newConfig);
     
     // 发送搜索配置更新事件
     eventBus.emit('search:config-updated', newConfig);
@@ -347,7 +347,7 @@ export class LayoutServiceImpl implements LayoutService {
       if (history.length > 10) {
         history.splice(10);
       }
-      storageService.set(STORAGE_KEYS.SEARCH_HISTORY || 'fantastic-admin-search-history', history);
+      storageService.set(STORAGE_KEYS.SEARCH_HISTORY || 'super-admin-search-history', history);
     }
     
     // 这里应该调用搜索服务获取结果
@@ -378,11 +378,11 @@ export class LayoutServiceImpl implements LayoutService {
   }
 
   getSearchHistory(): string[] {
-    return storageService.get(STORAGE_KEYS.SEARCH_HISTORY || 'fantastic-admin-search-history') || [];
+    return storageService.get(STORAGE_KEYS.SEARCH_HISTORY || 'super-admin-search-history') || [];
   }
 
   async clearSearchHistory(): Promise<void> {
-    storageService.remove(STORAGE_KEYS.SEARCH_HISTORY || 'fantastic-admin-search-history');
+    storageService.remove(STORAGE_KEYS.SEARCH_HISTORY || 'super-admin-search-history');
     
     // 发送搜索历史清空事件
     eventBus.emit('search:history-cleared');

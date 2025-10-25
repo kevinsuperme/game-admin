@@ -15,7 +15,7 @@ import { STORAGE_KEYS, HTTP_STATUS } from '../../shared/constants';
 // 认证服务实现
 export class AuthServiceImpl implements AuthService {
   private readonly tokenKey = STORAGE_KEYS.TOKEN;
-  private readonly refreshTokenKey = STORAGE_KEYS.REFRESH_TOKEN || 'fantastic-admin-refresh-token';
+  private readonly refreshTokenKey = STORAGE_KEYS.REFRESH_TOKEN || 'super-admin-refresh-token';
   private readonly userKey = STORAGE_KEYS.USER_INFO;
 
   /**

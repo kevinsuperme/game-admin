@@ -9,7 +9,7 @@ import { faNotification } from '@/ui/components/FaNotification'
 function showNotification(type?: 'html') {
   if (type === 'html') {
     faNotification({
-      title: 'Fantastic-admin 杰出的管理系统框架',
+      title: 'super-admin 杰出的管理系统框架',
       description: h('null', {
         innerHTML: '<p class="text-red-500">开箱即用，提供舒适开发体验</p>',
       }),
@@ -18,7 +18,7 @@ function showNotification(type?: 'html') {
   }
   else {
     faNotification({
-      title: 'Fantastic-admin 杰出的管理系统框架',
+      title: 'super-admin 杰出的管理系统框架',
       description: '开箱即用，提供舒适开发体验',
       duration: 3000,
     })

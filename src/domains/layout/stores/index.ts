@@ -202,7 +202,7 @@ export const useLayoutStore = defineStore('layout', () => {
 
   // 加载布局配置
   const loadLayoutConfig = () => {
-    const savedConfig = storageService.get(STORAGE_KEYS.LAYOUT_CONFIG || 'fantastic-admin-layout-config');
+    const savedConfig = storageService.get(STORAGE_KEYS.LAYOUT_CONFIG || 'super-admin-layout-config');
     if (savedConfig) {
       layoutConfig.value = { ...defaultLayoutConfig, ...savedConfig };
     }
@@ -210,12 +210,12 @@ export const useLayoutStore = defineStore('layout', () => {
 
   // 保存布局配置
   const saveLayoutConfig = () => {
-    storageService.set(STORAGE_KEYS.LAYOUT_CONFIG || 'fantastic-admin-layout-config', layoutConfig.value);
+    storageService.set(STORAGE_KEYS.LAYOUT_CONFIG || 'super-admin-layout-config', layoutConfig.value);
   };
 
   // 加载主题配置
   const loadThemeConfig = () => {
-    const savedConfig = storageService.get(STORAGE_KEYS.THEME_CONFIG || 'fantastic-admin-theme-config');
+    const savedConfig = storageService.get(STORAGE_KEYS.THEME_CONFIG || 'super-admin-theme-config');
     if (savedConfig) {
       themeConfig.value = { ...defaultThemeConfig, ...savedConfig };
     }
@@ -223,12 +223,12 @@ export const useLayoutStore = defineStore('layout', () => {
 
   // 保存主题配置
   const saveThemeConfig = () => {
-    storageService.set(STORAGE_KEYS.THEME_CONFIG || 'fantastic-admin-theme-config', themeConfig.value);
+    storageService.set(STORAGE_KEYS.THEME_CONFIG || 'super-admin-theme-config', themeConfig.value);
   };
 
   // 加载语言
   const loadLanguage = () => {
-    const savedLanguage = storageService.get(STORAGE_KEYS.LANGUAGE || 'fantastic-admin-language');
+    const savedLanguage = storageService.get(STORAGE_KEYS.LANGUAGE || 'super-admin-language');
     if (savedLanguage) {
       currentLanguage.value = savedLanguage;
     }
@@ -236,15 +236,15 @@ export const useLayoutStore = defineStore('layout', () => {
 
   // 保存语言
   const saveLanguage = () => {
-    storageService.set(STORAGE_KEYS.LANGUAGE || 'fantastic-admin-language', currentLanguage.value);
+    storageService.set(STORAGE_KEYS.LANGUAGE || 'super-admin-language', currentLanguage.value);
   };
 
   // 加载标签页
   const loadTabs = () => {
-    const savedTabs = storageService.get(STORAGE_KEYS.TABS || 'fantastic-admin-tabs');
+    const savedTabs = storageService.get(STORAGE_KEYS.TABS || 'super-admin-tabs');
     if (savedTabs) {
       tabs.value = savedTabs;
-      const savedActiveTab = storageService.get(STORAGE_KEYS.ACTIVE_TAB || 'fantastic-admin-active-tab');
+      const savedActiveTab = storageService.get(STORAGE_KEYS.ACTIVE_TAB || 'super-admin-active-tab');
       if (savedActiveTab) {
         activeTabKey.value = savedActiveTab;
       }
@@ -253,13 +253,13 @@ export const useLayoutStore = defineStore('layout', () => {
 
   // 保存标签页
   const saveTabs = () => {
-    storageService.set(STORAGE_KEYS.TABS || 'fantastic-admin-tabs', tabs.value);
-    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'fantastic-admin-active-tab', activeTabKey.value);
+    storageService.set(STORAGE_KEYS.TABS || 'super-admin-tabs', tabs.value);
+    storageService.set(STORAGE_KEYS.ACTIVE_TAB || 'super-admin-active-tab', activeTabKey.value);
   };
 
   // 加载搜索历史
   const loadSearchHistory = () => {
-    const savedHistory = storageService.get(STORAGE_KEYS.SEARCH_HISTORY || 'fantastic-admin-search-history');
+    const savedHistory = storageService.get(STORAGE_KEYS.SEARCH_HISTORY || 'super-admin-search-history');
     if (savedHistory) {
       searchHistory.value = savedHistory;
     }
@@ -267,7 +267,7 @@ export const useLayoutStore = defineStore('layout', () => {
 
   // 保存搜索历史
   const saveSearchHistory = () => {
-    storageService.set(STORAGE_KEYS.SEARCH_HISTORY || 'fantastic-admin-search-history', searchHistory.value);
+    storageService.set(STORAGE_KEYS.SEARCH_HISTORY || 'super-admin-search-history', searchHistory.value);
   };
 
   // 更新布局配置

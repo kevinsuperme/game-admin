@@ -128,7 +128,7 @@ export const THEME = {
     DARK: 'dark',
     AUTO: 'auto',
   },
-  STORAGE_KEY: 'fantastic-admin-theme',
+  STORAGE_KEY: 'super-admin-theme',
   CLASS_PREFIX: 'theme-',
 } as const;
 
@@ -169,13 +169,13 @@ export const OS = {
 
 // 存储键名
 export const STORAGE_KEYS = {
-  TOKEN: 'fantastic-admin-token',
-  USER_INFO: 'fantastic-admin-user-info',
-  PERMISSIONS: 'fantastic-admin-permissions',
-  THEME: 'fantastic-admin-theme',
-  LANGUAGE: 'fantastic-admin-language',
-  SIDEBAR_COLLAPSED: 'fantastic-admin-sidebar-collapsed',
-  TABS: 'fantastic-admin-tabs',
+  TOKEN: 'super-admin-token',
+  USER_INFO: 'super-admin-user-info',
+  PERMISSIONS: 'super-admin-permissions',
+  THEME: 'super-admin-theme',
+  LANGUAGE: 'super-admin-language',
+  SIDEBAR_COLLAPSED: 'super-admin-sidebar-collapsed',
+  TABS: 'super-admin-tabs',
 } as const;
 
 // 路由名称

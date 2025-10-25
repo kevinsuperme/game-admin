@@ -409,7 +409,7 @@ class GlobalErrorHandler {
    * 获取用户ID
    */
   private getUserId(): string | undefined {
-    return localStorage.getItem('fantastic-admin-user-id') || undefined;
+    return localStorage.getItem('super-admin-user-id') || undefined;
   }
 
   /**

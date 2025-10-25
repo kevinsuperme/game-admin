@@ -248,7 +248,7 @@ class LogService {
    */
   private getUserId(): string | undefined {
     // 这里可以从认证服务或存储中获取用户ID
-    return localStorage.getItem('fantastic-admin-user-id') || undefined;
+    return localStorage.getItem('super-admin-user-id') || undefined;
   }
 
   /**

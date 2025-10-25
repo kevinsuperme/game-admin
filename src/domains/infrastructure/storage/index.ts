@@ -2,7 +2,7 @@
 import type { StorageItem } from '@/domains/shared/types';
 
 // 存储键前缀
-const STORAGE_PREFIX = 'fantastic-admin-';
+const STORAGE_PREFIX = 'super-admin-';
 
 // 默认过期时间（毫秒）
 const DEFAULT_EXPIRY = 7 * 24 * 60 * 60 * 1000; // 7天

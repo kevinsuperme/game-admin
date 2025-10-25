@@ -26,7 +26,7 @@ function showToast(type?: 'success' | 'error' | 'info' | 'warning' | 'loading1' 
       })
       setTimeout(() => {
         toast.dismiss(loading)
-        toast('Fantastic-admin 杰出的管理系统框架', {
+        toast('super-admin 杰出的管理系统框架', {
           description: '开箱即用，提供舒适开发体验',
           position: 'top-right',
           duration: 3000,
@@ -34,7 +34,7 @@ function showToast(type?: 'success' | 'error' | 'info' | 'warning' | 'loading1' 
       }, 2000)
     }
     else {
-      toast[type]('Fantastic-admin 杰出的管理系统框架', {
+      toast[type]('super-admin 杰出的管理系统框架', {
         description: '开箱即用，提供舒适开发体验',
         position: 'top-right',
         duration: 3000,
@@ -42,7 +42,7 @@ function showToast(type?: 'success' | 'error' | 'info' | 'warning' | 'loading1' 
     }
   }
   else {
-    toast('Fantastic-admin 杰出的管理系统框架', {
+    toast('super-admin 杰出的管理系统框架', {
       description: '开箱即用，提供舒适开发体验',
       position: 'top-right',
       duration: 3000,

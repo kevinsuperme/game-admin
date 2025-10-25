@@ -38,7 +38,7 @@ export const INFRASTRUCTURE_CONFIG = {
   },
   // 存储配置
   storage: {
-    prefix: 'fantastic-admin-',
+    prefix: 'super-admin-',
     defaultExpiry: 7 * 24 * 60 * 60 * 1000, // 7天
   },
   // 日志配置

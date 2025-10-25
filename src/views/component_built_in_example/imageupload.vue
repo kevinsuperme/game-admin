@@ -7,7 +7,7 @@ meta:
 import { toast } from 'vue-sonner'
 
 const files1 = ref<string[]>([])
-const files2 = ref<string[]>(['https://fantastic-admin.hurui.me/logo.svg'])
+const files2 = ref<string[]>(['https://super-admin.hurui.me/logo.svg'])
 const files3 = ref<string[]>([])
 
 function handleSuccess() {

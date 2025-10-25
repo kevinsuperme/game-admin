@@ -13,7 +13,7 @@ import Alert from './components/alert.vue'
 import Command from './components/command.vue'
 import 'bytemd/dist/index.css'
 
-const content = ref('# Fantastic-admin')
+const content = ref('# super-admin')
 
 const plugins = [
   gfm({

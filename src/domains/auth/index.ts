@@ -65,7 +65,7 @@ export const AUTH_CONFIG = {
   // 权限检查间隔（毫秒）
   permissionCheckInterval: 60000,
   // 登录状态持久化键名
-  persistKey: 'fantastic-admin-auth',
+  persistKey: 'super-admin-auth',
   // 默认重定向路径
   defaultRedirectPath: '/',
   // 登录页面路径
