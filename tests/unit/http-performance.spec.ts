@@ -399,16 +399,16 @@ describe('HTTP客户端性能测试', () => {
       });
       
       // 发送并发请求
-      const promises = Array.from({ length: requestCount }, (_, i) => 
+      const promises = Array.from({ length: requestCount }, (_, i) =>
         client.request(`https://api.example.com/performance/concurrent/failure/${i}`)
-          .catch(error => ({ error: error.message, requestId: i }))
+          .catch((error: Error) => ({ error: error.message, requestId: i }))
       );
-      
+
       const results = await Promise.all(promises);
-      
+
       // 验证结果
-      const successCount = results.filter(r => !r.error).length;
-      const failureCount = results.filter(r => r.error).length;
+      const successCount = results.filter((r: any) => !r.error).length;
+      const failureCount = results.filter((r: any) => r.error).length;
       
       expect(successCount + failureCount).toBe(requestCount);
       expect(failureCount).toBeGreaterThan(0);

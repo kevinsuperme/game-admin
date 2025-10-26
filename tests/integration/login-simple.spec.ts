@@ -3,20 +3,42 @@ import { mount } from '@vue/test-utils'
 import { createPinia } from 'pinia'
 import LoginSimple from '@/views/login-simple.vue'
 
+// Mock router
+const mockRouter = {
+  push: vi.fn(),
+  replace: vi.fn(),
+  currentRoute: {
+    value: {
+      query: {},
+    },
+  },
+}
+
+const mockRoute = {
+  query: {},
+  params: {},
+  path: '/login',
+}
+
 describe('登录页面简单测试', () => {
   let wrapper: any
 
   beforeEach(() => {
     // 重置模拟函数
     vi.clearAllMocks()
-    
+    mockRouter.push.mockClear()
+
     // 创建 Pinia 实例
     const pinia = createPinia()
-    
+
     // 挂载组件
     wrapper = mount(LoginSimple, {
       global: {
         plugins: [pinia],
+        mocks: {
+          $router: mockRouter,
+          $route: mockRoute,
+        },
         stubs: {
           'router-link': true,
         },
@@ -46,14 +68,14 @@ describe('登录页面简单测试', () => {
     const accountInput = wrapper.find('#account')
     const passwordInput = wrapper.find('#password')
     const form = wrapper.find('form')
-    
+
     await accountInput.setValue('testuser')
     await passwordInput.setValue('testpassword')
-    
+
     await form.trigger('submit')
-    
+
     // 验证路由跳转是否被调用
-    expect(wrapper.vm.$router.push).toHaveBeenCalledWith('/')
+    expect(mockRouter.push).toHaveBeenCalledWith('/')
   })
 
   it('应该能够点击注册链接', async () => {
