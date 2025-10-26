@@ -74,7 +74,7 @@ function initChart2() {
           position: 'top',
         },
         smooth: true,
-        // @TODO 后续会换一种动画方式
+        // 动画配置：未来版本将采用更流畅的过渡动画
         animation: {
           appear: {
             animation: 'path-in',
