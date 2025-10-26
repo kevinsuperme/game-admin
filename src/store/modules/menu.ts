@@ -173,9 +173,14 @@ export const useMenuStore = defineStore(
     }
     // 生成导航（后端生成）
     async function generateMenusAtBack() {
-      await apiApp.menuList().then(async (res) => {
+      try {
+        const res = await apiApp.menuList()
         filesystemMenusRaw.value = (res.data as Menu.recordMainRaw[]).filter(item => item.children.length !== 0)
-      }).catch(() => {})
+      } catch (error) {
+        console.error('[MenuStore] Failed to generate menus from backend:', error)
+        // 设置为空数组以确保应用能继续运行
+        filesystemMenusRaw.value = []
+      }
     }
     // 设置主导航
     function isPathInMenus(menus: Menu.recordRaw[], path: string) {

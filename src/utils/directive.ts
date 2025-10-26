@@ -1,4 +1,6 @@
 import type { App, DirectiveBinding } from 'vue'
+import { watch } from 'vue'
+import useAuth from './composables/useAuth'
 
 export default function directive(app: App) {
   app.directive('auth', (el: HTMLElement, binding: DirectiveBinding) => {

@@ -1,6 +1,6 @@
 // HTTP客户端实现
 import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import type { ApiResponse } from '@/domains/shared/types';
 
 // 创建axios实例

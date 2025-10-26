@@ -3,15 +3,16 @@ export default function useMainPage() {
 
   const settingsStore = useSettingsStore()
 
-  function reload() {
+  async function reload() {
     settingsStore.setIsReloading(true)
-    router.push({
-      name: 'reload',
-    }).then(() => {
-      setTimeout(() => {
-        settingsStore.setIsReloading(false)
-      }, 100)
-    })
+    try {
+      await router.push({ name: 'reload' })
+      await new Promise(resolve => setTimeout(resolve, 100))
+    } catch (error) {
+      console.error('[useMainPage] Reload failed:', error)
+    } finally {
+      settingsStore.setIsReloading(false)
+    }
   }
 
   return {

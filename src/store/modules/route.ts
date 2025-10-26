@@ -39,7 +39,6 @@ export const useRouteStore = defineStore(
             if (item.children) {
               item.children = deleteMiddleRouteComponent(item.children)
             }
-            return item
           })
         }
       }
@@ -78,7 +77,10 @@ export const useRouteStore = defineStore(
     const routesMatcher = ref<RouterMatcher>()
     // 根据路径获取匹配的路由
     function getRouteMatchedByPath(path: string) {
-      return routesMatcher.value?.resolve({ path }, undefined!)?.matched ?? []
+      if (!routesMatcher.value) {
+        return []
+      }
+      return routesMatcher.value.resolve({ path })?.matched ?? []
     }
 
     // 生成路由（前端生成）

@@ -166,14 +166,16 @@ export function usePermissionCheck() {
 export function useAuthListener() {
   const authStore = useAuthStore();
   const router = useRouter();
-  
+
   // 监听认证状态变化
   const onAuthStateChanged = (callback: (isAuthenticated: boolean) => void) => {
-    return computed(() => {
-      const isAuth = authStore.isLoggedIn;
-      callback(isAuth);
-      return isAuth;
-    });
+    watch(
+      () => authStore.isLoggedIn,
+      (isAuth) => {
+        callback(isAuth);
+      },
+      { immediate: true }
+    );
   };
   
   // 处理认证过期

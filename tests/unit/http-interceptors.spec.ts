@@ -307,7 +307,7 @@ describe('HTTP拦截器测试', () => {
 
         console.log('\n=== Fetch Calls Summary ===');
         fetchCalls.forEach(call => console.log(call));
-        console.log(`Total fetch calls: ${callCount}`);
+        console.log(`Total fetch calls: ${fetchCalls.length}`);
 
         // 验证所有请求都成功
         expect(results).toHaveLength(3);

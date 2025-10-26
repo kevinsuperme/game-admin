@@ -23,6 +23,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (request) => {
     // 全局拦截请求发送前提交的参数
+    // 在拦截器内部调用 useUserStore() 以避免初始化顺序问题
     const userStore = useUserStore()
     // 设置请求头
     if (request.headers) {
@@ -54,7 +55,7 @@ function handleError(error: any) {
       message = '接口请求超时'
     }
     else if (message.includes('Request failed with status code')) {
-      message = `接口${message.substr(message.length - 3)}异常`
+      message = `接口${message.slice(-3)}异常`
     }
     toast.error('Error', {
       description: message,

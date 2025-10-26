@@ -140,7 +140,6 @@ export default function useTabbar() {
 
   return {
     getId,
-    close,
     closeById,
     closeOtherSide,
     closeLeftSide,
