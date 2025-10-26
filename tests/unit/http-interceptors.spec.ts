@@ -4,30 +4,34 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { http } from '@/utils/http';
-import { tokenManager } from '@/utils/token-manager';
 
-// Mock fetch API
-global.fetch = vi.fn();
-
-// Mock tokenManager
+// Mock模块必须在导入实际模块之前
 vi.mock('@/utils/token-manager', () => ({
   tokenManager: {
     getToken: vi.fn(),
     getRefreshToken: vi.fn(),
     setToken: vi.fn(),
+    setUser: vi.fn(),
     isTokenExpired: vi.fn(),
-    getAuthState: vi.fn()
+    getAuthState: vi.fn(),
+    clearToken: vi.fn(),
+    clearAll: vi.fn()
   }
 }));
 
-// Mock AuthStore
 vi.mock('@/domains/auth/stores', () => ({
   useAuthStore: vi.fn(() => ({
     syncStateFromTokenManager: vi.fn(),
     logout: vi.fn()
   }))
 }));
+
+// 在mock之后导入
+import { http } from '@/utils/http';
+import { tokenManager } from '@/utils/token-manager';
+
+// Mock fetch API
+global.fetch = vi.fn();
 
 describe('HTTP拦截器测试', () => {
   beforeEach(() => {
@@ -107,9 +111,10 @@ describe('HTTP拦截器测试', () => {
       const newToken = 'new-token';
       const refreshToken = 'refresh-token';
 
+      // 修复: 配置足够的返回值 - 第一次请求用oldToken,重试时用newToken
       vi.mocked(tokenManager.getToken)
         .mockReturnValueOnce(oldToken)  // 第一次请求
-        .mockReturnValueOnce(newToken); // 重试时
+        .mockReturnValue(newToken);     // 后续所有调用都返回newToken
       
       vi.mocked(tokenManager.getRefreshToken).mockReturnValue(refreshToken);
 
@@ -239,45 +244,90 @@ describe('HTTP拦截器测试', () => {
       const newToken = 'new-token';
       const refreshToken = 'refresh-token';
 
+      // getToken会被多次调用:初始3次+重试3次
       vi.mocked(tokenManager.getToken)
-        .mockReturnValue(oldToken);
+        .mockReturnValueOnce(oldToken)  // 第1个请求
+        .mockReturnValueOnce(oldToken)  // 第2个请求
+        .mockReturnValueOnce(oldToken)  // 第3个请求
+        .mockReturnValue(newToken);      // 所有重试都返回newToken
       
       vi.mocked(tokenManager.getRefreshToken).mockReturnValue(refreshToken);
 
-      // 所有初始请求都返回401
-      (global.fetch as any)
-        .mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({}) })
-        .mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({}) })
-        .mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({}) });
-
-      // 刷新token请求(应该只调用一次)
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          code: 200,
-          data: { token: newToken, refreshToken, expiresIn: 3600 }
-        })
+      // 使用一个通用的mock实现来处理所有fetch调用
+      let requestCount = 0;  // 原始请求计数
+      let refreshCount = 0;   // 刷新请求计数
+      const fetchCalls: string[] = [];
+      
+      (global.fetch as any).mockImplementation((url: string) => {
+        const callId = fetchCalls.length + 1;
+        fetchCalls.push(`${callId}: ${url}`);
+        console.log(`[FETCH ${callId}]`, url);
+        
+        // 检查是否是刷新token请求 - 必须包含完整路径
+        if (url.includes('/api/auth/refresh')) {
+          refreshCount++;
+          console.log(`  -> Refresh token success (count: ${refreshCount})`);
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              code: 200,
+              data: { token: newToken, refreshToken, expiresIn: 3600 }
+            })
+          });
+        }
+        
+        // 原始请求计数
+        requestCount++;
+        
+        // 前3次原始请求返回401
+        if (requestCount <= 3) {
+          console.log(`  -> Returning 401 (request ${requestCount})`);
+          return Promise.resolve({
+            ok: false,
+            status: 401,
+            json: async () => ({ code: 401, message: 'Unauthorized' })
+          });
+        }
+        
+        // 后续调用:重试请求成功
+        console.log(`  -> Retry success (request ${requestCount})`);
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ code: 200, data: { result: `ok${requestCount}` } })
+        });
       });
 
-      // 重试请求都成功
-      (global.fetch as any)
-        .mockResolvedValue({
-          ok: true,
-          json: async () => ({ code: 200, data: { result: 'ok' } })
+      try {
+        // 同时发起3个请求
+        const results = await Promise.all([
+          http.get('/test1'),
+          http.get('/test2'),
+          http.get('/test3')
+        ]);
+
+        console.log('\n=== Fetch Calls Summary ===');
+        fetchCalls.forEach(call => console.log(call));
+        console.log(`Total fetch calls: ${callCount}`);
+
+        // 验证所有请求都成功
+        expect(results).toHaveLength(3);
+        results.forEach(result => {
+          expect(result.code).toBe(200);
         });
 
-      // 同时发起3个请求
-      await Promise.all([
-        http.get('/test1'),
-        http.get('/test2'),
-        http.get('/test3')
-      ]);
-
-      // 验证刷新token只被调用一次
-      const refreshCalls = (global.fetch as any).mock.calls.filter(
-        (call: any[]) => call[0].includes('/auth/refresh')
-      );
-      expect(refreshCalls).toHaveLength(1);
+        // 验证刷新token只被调用一次
+        const refreshCalls = (global.fetch as any).mock.calls.filter(
+          (call: any[]) => call[0].includes('/auth/refresh')
+        );
+        
+        console.log(`\nRefresh calls count: ${refreshCalls.length}`);
+        expect(refreshCalls).toHaveLength(1);
+      } catch (error) {
+        console.log('\n=== Error occurred ===');
+        console.log('Fetch Calls:', fetchCalls);
+        console.log('Error:', error);
+        throw error;
+      }
     });
   });
 
@@ -337,31 +387,48 @@ describe('HTTP拦截器测试', () => {
       const newToken = 'new-token';
       const refreshToken = 'refresh-token';
 
+      // getToken会被调用2次:初始请求+重试请求
       vi.mocked(tokenManager.getToken)
-        .mockReturnValueOnce(oldToken)
-        .mockReturnValueOnce(newToken);
+        .mockReturnValueOnce(oldToken)  // 初始请求
+        .mockReturnValue(newToken);      // 重试请求
       
       vi.mocked(tokenManager.getRefreshToken).mockReturnValue(refreshToken);
 
-      // 原始请求401
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: false,
-        status: 401
-      });
-
-      // 刷新token成功
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          code: 200,
-          data: { token: newToken, refreshToken, expiresIn: 3600 }
-        })
-      });
-
-      // 重试也返回401(但不应该再次刷新)
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: false,
-        status: 401
+      // 使用mockImplementation来精确控制每次调用
+      let callCount = 0;
+      (global.fetch as any).mockImplementation((url: string) => {
+        callCount++;
+        console.log(`[FETCH ${callCount}]`, url);
+        
+        // 第1次:原始请求返回401
+        if (callCount === 1) {
+          console.log(`  -> Original request 401`);
+          return Promise.resolve({
+            ok: false,
+            status: 401,
+            json: async () => ({ code: 401, message: 'Unauthorized' })
+          });
+        }
+        
+        // 第2次:刷新token成功
+        if (url.includes('/api/auth/refresh')) {
+          console.log(`  -> Refresh token success`);
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              code: 200,
+              data: { token: newToken, refreshToken, expiresIn: 3600 }
+            })
+          });
+        }
+        
+        // 第3次:重试也返回401(但不应该再次刷新)
+        console.log(`  -> Retry request 401`);
+        return Promise.resolve({
+          ok: false,
+          status: 401,
+          json: async () => ({ code: 401, message: 'Still Unauthorized' })
+        });
       });
 
       await expect(http.get('/test')).rejects.toThrow();
@@ -371,6 +438,9 @@ describe('HTTP拦截器测试', () => {
         (call: any[]) => call[0].includes('/auth/refresh')
       );
       expect(refreshCalls).toHaveLength(1);
+      
+      // 验证总共调用了3次fetch:原始请求+刷新+重试
+      expect(global.fetch).toHaveBeenCalledTimes(3);
     });
   });
 });
