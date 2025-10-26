@@ -25,5 +25,14 @@
     "jsonc",
     "yaml"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.enabled": true,
+  "cSpell.diagnosticLevel": "Information",
+  "cSpell.customDictionaries": {
+    "project-words": {
+      "name": "project-words",
+      "path": "${workspaceRoot}/cspell.json",
+      "addWords": true
+    }
+  }
 }
