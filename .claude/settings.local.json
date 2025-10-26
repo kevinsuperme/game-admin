@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(for file in src/router/modules/*.example.ts)",
+      "Bash(do sed -i '1,6{/^function Layout/,/^}/d}' \"$file\")",
+      "Bash(sed -i \"1i import { Layout } from ''../utils/layout''\" \"$file\")",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

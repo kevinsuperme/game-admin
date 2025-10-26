@@ -1,8 +1,6 @@
+import { Layout } from '../utils/layout'
 import type { RouteRecordRaw } from 'vue-router'
 
-function Layout() {
-  return import('@/layouts/index.vue')
-}
 
 const routes: RouteRecordRaw = {
   path: '/plugin_example',
