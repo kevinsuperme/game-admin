@@ -9,15 +9,11 @@ import type {
   AuthError
 } from '../types';
 import { httpClient } from '../../infrastructure/http';
-import { storageService } from '../../infrastructure/storage';
-import { STORAGE_KEYS, HTTP_STATUS } from '../../shared/constants';
+import { tokenManager, type TokenData, type UserInfo } from '@/utils/token-manager';
+import { HTTP_STATUS } from '../../shared/constants';
 
 // 认证服务实现
 export class AuthServiceImpl implements AuthService {
-  private readonly tokenKey = STORAGE_KEYS.TOKEN;
-  private readonly refreshTokenKey = STORAGE_KEYS.REFRESH_TOKEN || 'super-admin-refresh-token';
-  private readonly userKey = STORAGE_KEYS.USER_INFO;
-
   /**
    * 用户登录
    * @param credentials 登录凭证
@@ -28,8 +24,14 @@ export class AuthServiceImpl implements AuthService {
       const response = await httpClient.post<AuthResult>('/auth/login', credentials);
       const { user, token, refreshToken, expiresIn } = response.data;
       
-      // 存储认证信息
-      this.saveAuthData({ user, token, refreshToken, expiresIn });
+      // 使用TokenManager存储认证信息
+      tokenManager.setToken({ 
+        token, 
+        refreshToken, 
+        expiresIn 
+      } as TokenData);
+      
+      tokenManager.setUser(user as UserInfo);
       
       return response.data;
     } catch (error: any) {
@@ -48,8 +50,8 @@ export class AuthServiceImpl implements AuthService {
       // 即使服务器登出失败，也要清除本地数据
       console.error('服务器登出失败:', error);
     } finally {
-      // 清除本地认证数据
-      this.clearAuthData();
+      // 使用TokenManager清除本地认证数据
+      tokenManager.clearAll();
     }
   }
 
@@ -60,7 +62,7 @@ export class AuthServiceImpl implements AuthService {
    */
   async refreshToken(refreshToken?: string): Promise<AuthResult> {
     try {
-      const tokenToUse = refreshToken || this.getRefreshToken();
+      const tokenToUse = refreshToken || tokenManager.getRefreshToken();
       
       if (!tokenToUse) {
         throw new Error('没有可用的刷新令牌');
@@ -72,13 +74,19 @@ export class AuthServiceImpl implements AuthService {
       
       const { user, token, refreshToken: newRefreshToken, expiresIn } = response.data;
       
-      // 更新存储的认证信息
-      this.saveAuthData({ user, token, refreshToken: newRefreshToken, expiresIn });
+      // 使用TokenManager更新存储的认证信息
+      tokenManager.setToken({ 
+        token, 
+        refreshToken: newRefreshToken, 
+        expiresIn 
+      } as TokenData);
+      
+      tokenManager.setUser(user as UserInfo);
       
       return response.data;
     } catch (error: any) {
       // 刷新令牌失败，清除认证数据
-      this.clearAuthData();
+      tokenManager.clearAll();
       throw this.handleAuthError(error);
     }
   }
@@ -130,11 +138,11 @@ export class AuthServiceImpl implements AuthService {
     try {
       const response = await httpClient.put('/auth/profile', data);
       
-      // 更新本地存储的用户信息
-      const currentUser = this.getUser();
+      // 使用TokenManager更新本地存储的用户信息
+      const currentUser = tokenManager.getUser();
       if (currentUser) {
         const updatedUser = { ...currentUser, ...response.data };
-        this.saveUser(updatedUser);
+        tokenManager.setUser(updatedUser);
       }
       
       return response.data;
@@ -153,8 +161,14 @@ export class AuthServiceImpl implements AuthService {
       const response = await httpClient.post<AuthResult>('/auth/register', data);
       const { user, token, refreshToken, expiresIn } = response.data;
       
-      // 存储认证信息
-      this.saveAuthData({ user, token, refreshToken, expiresIn });
+      // 使用TokenManager存储认证信息
+      tokenManager.setToken({ 
+        token, 
+        refreshToken, 
+        expiresIn 
+      } as TokenData);
+      
+      tokenManager.setUser(user as UserInfo);
       
       return response.data;
     } catch (error: any) {
@@ -192,6 +206,12 @@ export class AuthServiceImpl implements AuthService {
    */
   async validateToken(): Promise<boolean> {
     try {
+      // 先检查本地token是否过期
+      if (tokenManager.isTokenExpired()) {
+        return false;
+      }
+      
+      // 再向服务器验证
       await httpClient.get('/auth/validate');
       return true;
     } catch (error) {
@@ -204,17 +224,14 @@ export class AuthServiceImpl implements AuthService {
    * @returns 认证状态
    */
   getAuthState(): AuthState {
-    const token = this.getToken();
-    const refreshToken = this.getRefreshToken();
-    const user = this.getUser();
-    const isAuthenticated = !!token && !!user;
+    const authState = tokenManager.getAuthState();
     
     return {
-      isAuthenticated,
-      user,
-      token,
-      refreshToken,
-      permissions: user?.permissions || [],
+      isAuthenticated: authState.isAuthenticated,
+      user: authState.user,
+      token: authState.token,
+      refreshToken: authState.refreshToken,
+      permissions: authState.user?.permissions || [],
       isLoading: false,
       error: null,
     };
@@ -225,7 +242,7 @@ export class AuthServiceImpl implements AuthService {
    * @returns 令牌
    */
   getToken(): string | null {
-    return storageService.get(this.tokenKey);
+    return tokenManager.getToken();
   }
 
   /**
@@ -233,7 +250,7 @@ export class AuthServiceImpl implements AuthService {
    * @returns 刷新令牌
    */
   getRefreshToken(): string | null {
-    return storageService.get(this.refreshTokenKey);
+    return tokenManager.getRefreshToken();
   }
 
   /**
@@ -241,48 +258,7 @@ export class AuthServiceImpl implements AuthService {
    * @returns 用户信息
    */
   getUser(): any | null {
-    return storageService.get(this.userKey);
-  }
-
-  /**
-   * 保存认证数据
-   * @param data 认证数据
-   */
-  private saveAuthData(data: {
-    user: any;
-    token: string;
-    refreshToken?: string;
-    expiresIn?: number;
-  }): void {
-    const { user, token, refreshToken, expiresIn } = data;
-    
-    // 保存令牌
-    storageService.set(this.tokenKey, token, expiresIn ? expiresIn * 1000 : undefined);
-    
-    // 保存刷新令牌
-    if (refreshToken) {
-      storageService.set(this.refreshTokenKey, refreshToken);
-    }
-    
-    // 保存用户信息
-    this.saveUser(user);
-  }
-
-  /**
-   * 保存用户信息
-   * @param user 用户信息
-   */
-  private saveUser(user: any): void {
-    storageService.set(this.userKey, user);
-  }
-
-  /**
-   * 清除认证数据
-   */
-  private clearAuthData(): void {
-    storageService.remove(this.tokenKey);
-    storageService.remove(this.refreshTokenKey);
-    storageService.remove(this.userKey);
+    return tokenManager.getUser();
   }
 
   /**

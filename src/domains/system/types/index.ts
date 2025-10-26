@@ -516,22 +516,22 @@ export interface SystemStore {
   // 操作方法
   fetchSystemInfo(): Promise<void>;
   fetchSystemConfig(): Promise<void>;
-  updateSystemConfig(config: Partial<SystemConfig>): Promise<void>;
+  updateSystemConfig(config: Partial<SystemConfig>): Promise<SystemConfig>;
   fetchSystemLogs(params?: any): Promise<void>;
   clearSystemLogs(before?: string): Promise<void>;
   fetchSystemNotifications(params?: any): Promise<void>;
-  createSystemNotification(notification: Omit<SystemNotification, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<void>;
-  updateSystemNotification(id: string, notification: Partial<SystemNotification>): Promise<void>;
+  createSystemNotification(notification: Omit<SystemNotification, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<SystemNotification>;
+  updateSystemNotification(id: string, notification: Partial<SystemNotification>): Promise<SystemNotification>;
   deleteSystemNotification(id: string): Promise<void>;
   markNotificationAsRead(id: string): Promise<void>;
   fetchSystemTasks(params?: any): Promise<void>;
-  createSystemTask(task: Omit<SystemTask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<void>;
-  updateSystemTask(id: string, task: Partial<SystemTask>): Promise<void>;
+  createSystemTask(task: Omit<SystemTask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<SystemTask>;
+  updateSystemTask(id: string, task: Partial<SystemTask>): Promise<SystemTask>;
   deleteSystemTask(id: string): Promise<void>;
   runSystemTask(id: string): Promise<void>;
   cancelSystemTask(id: string): Promise<void>;
   fetchSystemBackups(params?: any): Promise<void>;
-  createSystemBackup(backup: Omit<SystemBackup, 'id' | 'createdAt' | 'createdBy'>): Promise<void>;
+  createSystemBackup(backup: Omit<SystemBackup, 'id' | 'createdAt' | 'createdBy'>): Promise<SystemBackup>;
   deleteSystemBackup(id: string): Promise<void>;
   downloadSystemBackup(id: string): Promise<string>;
   restoreSystemBackup(id: string): Promise<void>;
@@ -541,15 +541,15 @@ export interface SystemStore {
   fetchSystemStats(params?: any): Promise<void>;
   fetchSystemServices(): Promise<void>;
   getSystemService(id: string): Promise<SystemServiceData>;
-  updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<void>;
+  updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<SystemServiceData>;
   deleteSystemService(id: string): Promise<void>;
   restartSystemService(id: string): Promise<void>;
   stopSystemService(id: string): Promise<void>;
   startSystemService(id: string): Promise<void>;
   fetchSystemSecurity(): Promise<void>;
-  updateSystemSecurity(security: Partial<SystemSecurity>): Promise<void>;
+  updateSystemSecurity(security: Partial<SystemSecurity>): Promise<SystemSecurity>;
   fetchSystemMonitoring(): Promise<void>;
-  updateSystemMonitoring(monitoring: Partial<SystemMonitoring>): Promise<void>;
+  updateSystemMonitoring(monitoring: Partial<SystemMonitoring>): Promise<SystemMonitoring>;
   fetchSystemMaintenance(): Promise<void>;
-  updateSystemMaintenance(maintenance: Partial<SystemMaintenance>): Promise<void>;
+  updateSystemMaintenance(maintenance: Partial<SystemMaintenance>): Promise<SystemMaintenance>;
 }

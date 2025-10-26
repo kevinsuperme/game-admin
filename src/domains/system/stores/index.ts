@@ -175,9 +175,10 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async updateSystemConfig(config: Partial<SystemConfig>): Promise<void> {
+    async updateSystemConfig(config: Partial<SystemConfig>): Promise<SystemConfig> {
       try {
         this.systemConfig = await systemService.updateSystemConfig(config);
+        return this.systemConfig;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统配置失败';
         throw error;
@@ -227,22 +228,24 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async createSystemNotification(notification: Omit<SystemNotification, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<void> {
+    async createSystemNotification(notification: Omit<SystemNotification, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<SystemNotification> {
       try {
-        await systemService.createSystemNotification(notification);
+        const result = await systemService.createSystemNotification(notification);
         // 重新获取通知
         await this.fetchSystemNotifications();
+        return result;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '创建系统通知失败';
         throw error;
       }
     },
     
-    async updateSystemNotification(id: string, notification: Partial<SystemNotification>): Promise<void> {
+    async updateSystemNotification(id: string, notification: Partial<SystemNotification>): Promise<SystemNotification> {
       try {
-        await systemService.updateSystemNotification(id, notification);
+        const result = await systemService.updateSystemNotification(id, notification);
         // 重新获取通知
         await this.fetchSystemNotifications();
+        return result;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统通知失败';
         throw error;
@@ -286,22 +289,24 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async createSystemTask(task: Omit<SystemTask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<void> {
+    async createSystemTask(task: Omit<SystemTask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<SystemTask> {
       try {
-        await systemService.createSystemTask(task);
+        const result = await systemService.createSystemTask(task);
         // 重新获取任务
         await this.fetchSystemTasks();
+        return result;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '创建系统任务失败';
         throw error;
       }
     },
     
-    async updateSystemTask(id: string, task: Partial<SystemTask>): Promise<void> {
+    async updateSystemTask(id: string, task: Partial<SystemTask>): Promise<SystemTask> {
       try {
-        await systemService.updateSystemTask(id, task);
+        const result = await systemService.updateSystemTask(id, task);
         // 重新获取任务
         await this.fetchSystemTasks();
+        return result;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统任务失败';
         throw error;
@@ -356,11 +361,12 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async createSystemBackup(backup: Omit<SystemBackup, 'id' | 'createdAt' | 'createdBy'>): Promise<void> {
+    async createSystemBackup(backup: Omit<SystemBackup, 'id' | 'createdAt' | 'createdBy'>): Promise<SystemBackup> {
       try {
-        await systemService.createSystemBackup(backup);
+        const result = await systemService.createSystemBackup(backup);
         // 重新获取备份
         await this.fetchSystemBackups();
+        return result;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '创建系统备份失败';
         throw error;
@@ -468,11 +474,12 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<void> {
+    async updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<SystemServiceData> {
       try {
-        await systemService.updateSystemService(id, service);
+        const result = await systemService.updateSystemService(id, service);
         // 重新获取服务
         await this.fetchSystemServices();
+        return result;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统服务失败';
         throw error;
@@ -536,9 +543,10 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async updateSystemSecurity(security: Partial<SystemSecurity>): Promise<void> {
+    async updateSystemSecurity(security: Partial<SystemSecurity>): Promise<SystemSecurity> {
       try {
         this.systemSecurity = await systemService.updateSystemSecurity(security);
+        return this.systemSecurity;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统安全设置失败';
         throw error;
@@ -558,9 +566,10 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async updateSystemMonitoring(monitoring: Partial<SystemMonitoring>): Promise<void> {
+    async updateSystemMonitoring(monitoring: Partial<SystemMonitoring>): Promise<SystemMonitoring> {
       try {
         this.systemMonitoring = await systemService.updateSystemMonitoring(monitoring);
+        return this.systemMonitoring;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统监控设置失败';
         throw error;
@@ -580,9 +589,10 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
-    async updateSystemMaintenance(maintenance: Partial<SystemMaintenance>): Promise<void> {
+    async updateSystemMaintenance(maintenance: Partial<SystemMaintenance>): Promise<SystemMaintenance> {
       try {
         this.systemMaintenance = await systemService.updateSystemMaintenance(maintenance);
+        return this.systemMaintenance;
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统维护状态失败';
         throw error;

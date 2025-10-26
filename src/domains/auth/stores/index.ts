@@ -1,10 +1,10 @@
 // 认证域状态管理
 
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import type { AuthState, User, LoginCredentials, PasswordChangeData, AuthError } from '../types';
+import { ref, computed, readonly } from 'vue';
+import type { AuthState, User, LoginCredentials, PasswordChangeData } from '../types';
 import { authService } from '../services';
-import { useRouter } from 'vue-router';
+import { tokenManager } from '@/utils/token-manager';
 
 export const useAuthStore = defineStore('auth', () => {
   // 状态
@@ -28,20 +28,46 @@ export const useAuthStore = defineStore('auth', () => {
   }));
 
   /**
+   * 从TokenManager同步状态到Store
+   */
+  const syncStateFromTokenManager = () => {
+    const state = tokenManager.getAuthState();
+    user.value = state.user;
+    token.value = state.token;
+    refreshToken.value = state.refreshToken;
+    permissions.value = state.user?.permissions || [];
+  };
+
+  /**
    * 初始化认证状态
    */
   const initAuth = async () => {
     try {
-      // 从服务获取当前认证状态
-      const state = authService.getAuthState();
+      // 从TokenManager获取当前认证状态
+      syncStateFromTokenManager();
       
-      user.value = state.user;
-      token.value = state.token;
-      refreshToken.value = state.refreshToken;
-      permissions.value = state.permissions;
-      
-      // 如果有令牌，验证令牌是否有效
+      // 如果有令牌,验证令牌是否有效
       if (token.value) {
+        // 检查token是否过期
+        if (tokenManager.isTokenExpired()) {
+          // 如果过期且有refreshToken,尝试刷新
+          if (refreshToken.value) {
+            try {
+              await refreshAuthToken();
+              return;
+            } catch (err) {
+              // 刷新失败,登出
+              await logout();
+              return;
+            }
+          } else {
+            // 没有refreshToken,直接登出
+            await logout();
+            return;
+          }
+        }
+        
+        // Token未过期,验证有效性
         const isValid = await authService.validateToken();
         if (!isValid) {
           await logout();
@@ -68,10 +94,9 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const result = await authService.login(credentials);
       
-      user.value = result.user;
-      token.value = result.token;
-      refreshToken.value = result.refreshToken || null;
-      permissions.value = result.user.permissions;
+      // AuthService已经通过TokenManager存储了数据
+      // 只需要同步到Store即可
+      syncStateFromTokenManager();
       
       return result;
     } catch (err: any) {
@@ -91,7 +116,8 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (err) {
       console.error('登出失败:', err);
     } finally {
-      // 无论服务器登出是否成功，都清除本地状态
+      // AuthService已经通过TokenManager清除了数据
+      // 清除Store状态
       user.value = null;
       token.value = null;
       refreshToken.value = null;
@@ -109,15 +135,14 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const result = await authService.refreshToken(customRefreshToken);
       
-      user.value = result.user;
-      token.value = result.token;
-      refreshToken.value = result.refreshToken || null;
-      permissions.value = result.user.permissions;
+      // AuthService已经通过TokenManager更新了数据
+      // 同步到Store
+      syncStateFromTokenManager();
       
       return result;
     } catch (err: any) {
       error.value = err.message || '令牌刷新失败';
-      // 刷新失败，清除认证状态
+      // 刷新失败,清除认证状态
       await logout();
       throw err;
     }
@@ -133,16 +158,19 @@ export const useAuthStore = defineStore('auth', () => {
       const currentUser = await authService.getCurrentUser();
       user.value = currentUser;
       permissions.value = currentUser.permissions || [];
+      
+      // 更新TokenManager中的用户信息
+      tokenManager.setUser(currentUser);
     } catch (err: any) {
       console.error('获取用户信息失败:', err);
       error.value = err.message || '获取用户信息失败';
       
-      // 如果是令牌错误，尝试刷新令牌
+      // 如果是令牌错误,尝试刷新令牌
       if (err.code === 'TOKEN_EXPIRED' && refreshToken.value) {
         try {
           await refreshAuthToken();
         } catch (refreshErr) {
-          // 刷新也失败，登出
+          // 刷新也失败,登出
           await logout();
         }
       }
@@ -159,6 +187,9 @@ export const useAuthStore = defineStore('auth', () => {
     
     try {
       const updatedUser = await authService.updateProfile(data);
+      
+      // AuthService已经通过TokenManager更新了用户信息
+      // 同步到Store
       user.value = { ...user.value, ...updatedUser };
       
       return updatedUser;
@@ -271,6 +302,7 @@ export const useAuthStore = defineStore('auth', () => {
     authState,
     
     // 方法
+    syncStateFromTokenManager, // 添加这个方法到导出列表
     initAuth,
     login,
     logout,
