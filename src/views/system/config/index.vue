@@ -215,11 +215,12 @@
 import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useSystemStore } from '@/domains/system/stores';
+import type { SystemConfig } from '@/domains/system/types';
 
 const systemStore = useSystemStore();
 
-// 系统基本配置
-const systemConfig = ref({
+// 系统配置
+const systemConfig = ref<SystemConfig>({
   siteName: '',
   siteDescription: '',
   siteKeywords: '',
@@ -228,11 +229,11 @@ const systemConfig = ref({
   logo: '',
   favicon: '',
   theme: {
+    mode: 'light',
     primaryColor: '#409EFF',
     accentColor: '#67C23A',
-    backgroundColor: '#FFFFFF',
-    textColor: '#303133',
-    mode: 'light' as 'light' | 'dark' | 'auto',
+    backgroundColor: '#F5F7FA',
+    textColor: '#303133'
   },
   features: {
     registration: true,
@@ -241,14 +242,14 @@ const systemConfig = ref({
     socialLogin: false,
     fileUpload: true,
     notifications: true,
-    analytics: false,
+    analytics: false
   },
   limits: {
-    maxFileSize: 10485760, // 10MB
-    maxFileCount: 100,
+    maxFileSize: 10485760,
+    maxFileCount: 10,
     maxLoginAttempts: 5,
     passwordMinLength: 8,
-    sessionTimeout: 30, // 30分钟
+    sessionTimeout: 120
   },
   email: {
     host: '',
@@ -256,42 +257,22 @@ const systemConfig = ref({
     secure: false,
     auth: {
       user: '',
-      pass: '',
+      pass: ''
     },
-    from: '',
+    from: ''
   },
   storage: {
-    type: 'local' as 'local' | 'oss' | 's3',
-    path: '',
-    bucket: '',
-    region: '',
-    accessKey: '',
-    secretKey: '',
-  },
+    type: 'local',
+    path: '/uploads',
+    // 明确指定可选字段为undefined
+    bucket: undefined,
+    region: undefined,
+    accessKey: undefined,
+    secretKey: undefined
+  }
 });
 
-// 安全配置
-const securityConfig = ref({
-  passwordMinLength: 8,
-  passwordComplexity: ['lowercase', 'numbers'],
-  sessionTimeout: 30,
-  loginFailureLock: true,
-  maxFailureAttempts: 5,
-  lockDuration: 15,
-  twoFactorAuth: false,
-});
 
-// 通知配置
-const notificationConfig = ref({
-  emailEnabled: false,
-  smtpHost: '',
-  smtpPort: 587,
-  smtpUsername: '',
-  smtpPassword: '',
-  smsEnabled: false,
-  smsProvider: 'aliyun',
-  systemNotifications: ['login', 'security'],
-});
 
 // 获取系统配置
 const fetchConfig = async () => {
@@ -300,35 +281,21 @@ const fetchConfig = async () => {
     const config = systemStore.systemConfig;
     
     if (config) {
+      // 确保storage.bucket等可选字段正确处理
+      const storageConfig = config.storage || {}
       systemConfig.value = {
-        name: config.name || '',
-        version: config.version || '',
-        description: config.description || '',
-        adminEmail: config.adminEmail || '',
-        timezone: config.timezone || 'Asia/Shanghai',
-        language: config.language || 'zh-CN',
-      };
-      
-      securityConfig.value = {
-        passwordMinLength: config.security?.passwordMinLength || 8,
-        passwordComplexity: config.security?.passwordComplexity || ['lowercase', 'numbers'],
-        sessionTimeout: config.security?.sessionTimeout || 30,
-        loginFailureLock: config.security?.loginFailureLock !== false,
-        maxFailureAttempts: config.security?.maxFailureAttempts || 5,
-        lockDuration: config.security?.lockDuration || 15,
-        twoFactorAuth: config.security?.twoFactorAuth || false,
-      };
-      
-      notificationConfig.value = {
-        emailEnabled: config.notification?.emailEnabled || false,
-        smtpHost: config.notification?.smtpHost || '',
-        smtpPort: config.notification?.smtpPort || 587,
-        smtpUsername: config.notification?.smtpUsername || '',
-        smtpPassword: config.notification?.smtpPassword || '',
-        smsEnabled: config.notification?.smsEnabled || false,
-        smsProvider: config.notification?.smsProvider || 'aliyun',
-        systemNotifications: config.notification?.systemNotifications || ['login', 'security'],
-      };
+        ...systemConfig.value,
+        ...config,
+        storage: {
+          ...systemConfig.value.storage,
+          ...storageConfig,
+          // 确保可选字段有默认值或undefined
+          bucket: storageConfig.bucket !== undefined ? storageConfig.bucket : undefined,
+          region: storageConfig.region !== undefined ? storageConfig.region : undefined,
+          accessKey: storageConfig.accessKey !== undefined ? storageConfig.accessKey : undefined,
+          secretKey: storageConfig.secretKey !== undefined ? storageConfig.secretKey : undefined
+        }
+      }
     }
   } catch (error) {
     console.error('获取系统配置失败:', error);
@@ -349,44 +316,61 @@ const saveConfig = async () => {
 
 // 重置系统配置
 const resetConfig = () => {
-  fetchConfig();
+  systemConfig.value = {
+    siteName: 'Fantastic Admin',
+    siteDescription: '基于Vue3和Element Plus的后台管理系统',
+    siteKeywords: 'admin,vue3,element-plus',
+    siteAuthor: 'Fantastic Team',
+    siteUrl: 'https://fantastic-admin.github.io',
+    logo: '',
+    favicon: '',
+    theme: {
+      mode: 'light',
+      primaryColor: '#409EFF',
+      accentColor: '#67C23A',
+      backgroundColor: '#F5F7FA',
+      textColor: '#303133'
+    },
+    features: {
+      registration: true,
+      emailVerification: false,
+      twoFactorAuth: false,
+      socialLogin: false,
+      fileUpload: true,
+      notifications: true,
+      analytics: false
+    },
+    limits: {
+      maxFileSize: 10485760,
+      maxFileCount: 10,
+      maxLoginAttempts: 5,
+      passwordMinLength: 8,
+      sessionTimeout: 120
+    },
+    email: {
+      host: '',
+      port: 587,
+      secure: false,
+      auth: {
+        user: '',
+        pass: ''
+      },
+      from: ''
+    },
+    storage: {
+      type: 'local',
+      path: '/uploads',
+      // 明确指定可选字段为undefined
+      bucket: undefined,
+      region: undefined,
+      accessKey: undefined,
+      secretKey: undefined
+    }
+  };
+  ElMessage.success('配置已重置');
 };
 
-// 保存安全配置
-const saveSecurityConfig = async () => {
-  try {
-    await systemStore.updateSystemConfig({
-      security: securityConfig.value
-    });
-    ElMessage.success('安全配置已保存');
-  } catch (error) {
-    console.error('保存安全配置失败:', error);
-    ElMessage.error('保存安全配置失败');
-  }
-};
 
-// 重置安全配置
-const resetSecurityConfig = () => {
-  fetchConfig();
-};
-
-// 保存通知配置
-const saveNotificationConfig = async () => {
-  try {
-    await systemStore.updateSystemConfig({
-      notification: notificationConfig.value
-    });
-    ElMessage.success('通知配置已保存');
-  } catch (error) {
-    console.error('保存通知配置失败:', error);
-    ElMessage.error('保存通知配置失败');
-  }
-};
-
-// 重置通知配置
-const resetNotificationConfig = () => {
-  fetchConfig();
-};
 
 onMounted(() => {
   fetchConfig();

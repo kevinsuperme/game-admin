@@ -22,7 +22,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemInfo',
         component: () => import('@/views/system/info/index.vue'),
         meta: {
-          title: '系统信息',
+          title: '信息',
           icon: 'info',
         },
       },
@@ -31,7 +31,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemConfig',
         component: () => import('@/views/system/config/index.vue'),
         meta: {
-          title: '系统配置',
+          title: '配置',
           icon: 'config',
         },
       },
@@ -40,7 +40,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemLogs',
         component: () => import('@/views/system/logs/index.vue'),
         meta: {
-          title: '系统日志',
+          title: '日志',
           icon: 'document',
         },
       },
@@ -49,7 +49,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemNotifications',
         component: () => import('@/views/system/notifications/index.vue'),
         meta: {
-          title: '系统通知',
+          title: '通知',
           icon: 'notification',
         },
       },
@@ -58,7 +58,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemTasks',
         component: () => import('@/views/system/tasks/index.vue'),
         meta: {
-          title: '系统任务',
+          title: '任务',
           icon: 'task',
         },
       },
@@ -67,7 +67,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemBackups',
         component: () => import('@/views/system/backups/index.vue'),
         meta: {
-          title: '系统备份',
+          title: '备份',
           icon: 'backup',
         },
       },
@@ -76,7 +76,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemUpdates',
         component: () => import('@/views/system/updates/index.vue'),
         meta: {
-          title: '系统更新',
+          title: '更新',
           icon: 'update',
         },
       },
@@ -85,7 +85,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemServices',
         component: () => import('@/views/system/services/index.vue'),
         meta: {
-          title: '系统服务',
+          title: '服务',
           icon: 'service',
         },
       },
@@ -94,7 +94,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemSecurity',
         component: () => import('@/views/system/security/index.vue'),
         meta: {
-          title: '系统安全',
+          title: '安全',
           icon: 'security',
         },
       },
@@ -103,7 +103,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemMonitoring',
         component: () => import('@/views/system/monitoring/index.vue'),
         meta: {
-          title: '系统监控',
+          title: '监控',
           icon: 'monitoring',
         },
       },
@@ -112,7 +112,7 @@ export const SYSTEM_ROUTES = [
         name: 'SystemMaintenance',
         component: () => import('@/views/system/maintenance/index.vue'),
         meta: {
-          title: '系统维护',
+          title: '维护',
           icon: 'maintenance',
         },
       },

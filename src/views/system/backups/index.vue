@@ -349,7 +349,10 @@ const createBackup = async () => {
       name: newBackup.value.name,
       type: newBackup.value.type,
       includes: newBackup.value.includes,
+      excludes: [], // 添加默认的排除列表
       description: newBackup.value.description,
+      compression: true, // 默认启用压缩
+      encryption: false, // 默认不启用加密
     });
     
     ElMessage.success('备份创建成功');
