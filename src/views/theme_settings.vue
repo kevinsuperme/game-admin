@@ -21,7 +21,7 @@
         >
           <!-- 左侧设置面板 -->
           <div class="settings-panel">
-            <ThemeSettings />
+            <ThemeSettings v-model="themeSettingsVisible" />
           </div>
 
           <!-- 右侧预览面板 -->
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import ThemeSettings from '@/domains/infrastructure/components/ThemeSettings.vue';
 import ThemeToggle from '@/domains/infrastructure/components/ThemeToggle.vue';
 import ResponsiveContainer from '@/domains/infrastructure/components/ResponsiveContainer.vue';
@@ -106,6 +106,9 @@ const form = reactive({
   select: '',
   switch: false,
 });
+
+// 主题设置抽屉可见性
+const themeSettingsVisible = ref(true);
 </script>
 
 <style scoped>
@@ -119,16 +122,16 @@ const form = reactive({
 }
 
 .page-title {
+  margin-bottom: 8px;
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 8px;
   color: var(--g-color-text-primary);
 }
 
 .page-description {
+  margin: 0;
   font-size: 16px;
   color: var(--g-color-text-secondary);
-  margin: 0;
 }
 
 .settings-content {
@@ -143,17 +146,17 @@ const form = reactive({
 .preview-panel {
   flex: 1;
   min-width: 300px;
+  padding: 16px;
   background-color: var(--g-color-bg-secondary);
   border-radius: 8px;
-  padding: 16px;
 }
 
 .preview-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
   padding-bottom: 8px;
+  margin-bottom: 16px;
   border-bottom: 1px solid var(--g-color-border);
 }
 
@@ -172,10 +175,10 @@ const form = reactive({
 
 .preview-card,
 .preview-form {
+  padding: 16px;
   background-color: var(--g-color-bg-primary);
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 .preview-card h4,
@@ -194,22 +197,22 @@ const form = reactive({
 
 .preview-buttons {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
 }
 
 .mobile-preview {
+  padding: 16px;
   background-color: var(--g-color-bg-secondary);
   border-radius: 8px;
-  padding: 16px;
 }
 
 .mobile-preview-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
   padding-bottom: 8px;
+  margin-bottom: 16px;
   border-bottom: 1px solid var(--g-color-border);
 }
 
@@ -227,10 +230,10 @@ const form = reactive({
 }
 
 .mobile-preview-card {
+  padding: 16px;
   background-color: var(--g-color-bg-primary);
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 .mobile-preview-card h4 {
@@ -248,20 +251,20 @@ const form = reactive({
 
 .mobile-preview-buttons {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
 }
 
 /* 响应式调整 */
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .theme-settings-page {
     padding: 12px;
   }
-  
+
   .page-title {
     font-size: 24px;
   }
-  
+
   .page-description {
     font-size: 14px;
   }

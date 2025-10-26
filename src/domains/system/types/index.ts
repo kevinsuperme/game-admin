@@ -234,8 +234,8 @@ export interface SystemStats {
   };
 }
 
-// 系统服务
-export interface SystemService {
+// 系统服务数据结构
+export interface SystemServiceData {
   id: string;
   name: string;
   description: string;
@@ -437,7 +437,10 @@ export interface SystemService {
   }): Promise<SystemStats>;
   
   // 系统服务
-  getSystemServices(): Promise<SystemService[]>;
+  getSystemServices(): Promise<SystemServiceData[]>;
+  getSystemService(id: string): Promise<SystemServiceData>;
+  updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<SystemServiceData>;
+  deleteSystemService(id: string): Promise<void>;
   restartSystemService(id: string): Promise<void>;
   stopSystemService(id: string): Promise<void>;
   startSystemService(id: string): Promise<void>;
@@ -495,7 +498,7 @@ export interface SystemStore {
   statsLoading: boolean;
   
   // 系统服务
-  systemServices: SystemService[];
+  systemServices: SystemServiceData[];
   servicesLoading: boolean;
   
   // 系统安全
@@ -537,6 +540,9 @@ export interface SystemStore {
   installSystemUpdate(id: string): Promise<void>;
   fetchSystemStats(params?: any): Promise<void>;
   fetchSystemServices(): Promise<void>;
+  getSystemService(id: string): Promise<SystemServiceData>;
+  updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<void>;
+  deleteSystemService(id: string): Promise<void>;
   restartSystemService(id: string): Promise<void>;
   stopSystemService(id: string): Promise<void>;
   startSystemService(id: string): Promise<void>;

@@ -6,6 +6,13 @@ export interface User {
   avatar?: string;
   permissions: string[];
   roles: string[];
+  email?: string;
+  phone?: string;
+  createTime?: string;
+  lastLoginTime?: string;
+  username?: string;
+  nickname?: string;
+  realName?: string;
 }
 
 export interface LoginCredentials {

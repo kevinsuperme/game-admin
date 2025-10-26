@@ -10,6 +10,7 @@ import type {
   SystemBackup,
   SystemUpdate,
   SystemStats,
+  SystemServiceData,
   SystemService,
   SystemSecurity,
   SystemMonitoring,
@@ -18,7 +19,7 @@ import type {
 import { http } from '@/utils/http';
 import { generateId } from '@/utils/common';
 
-// 系统服务接口实现
+// 系统服务实现
 class SystemServiceImpl implements SystemService {
   // 系统信息
   async getSystemInfo(): Promise<SystemInfo> {
@@ -204,9 +205,23 @@ class SystemServiceImpl implements SystemService {
   }
   
   // 系统服务
-  async getSystemServices(): Promise<SystemService[]> {
-    const response = await http.get<SystemService[]>('/api/system/services');
+  async getSystemServices(): Promise<SystemServiceData[]> {
+    const response = await http.get<SystemServiceData[]>('/api/system/services');
     return response.data;
+  }
+  
+  async getSystemService(id: string): Promise<SystemServiceData> {
+    const response = await http.get<SystemServiceData>(`/api/system/services/${id}`);
+    return response.data;
+  }
+  
+  async updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<SystemServiceData> {
+    const response = await http.put<SystemServiceData>(`/api/system/services/${id}`, service);
+    return response.data;
+  }
+  
+  async deleteSystemService(id: string): Promise<void> {
+    await http.delete(`/api/system/services/${id}`);
   }
   
   async restartSystemService(id: string): Promise<void> {
@@ -254,6 +269,9 @@ class SystemServiceImpl implements SystemService {
     return response.data;
   }
 }
+
+// 导出服务类
+export { SystemServiceImpl, SystemManagementServiceImpl };
 
 // 创建系统服务实例
 export const systemService = new SystemServiceImpl();

@@ -30,23 +30,23 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build application
-        run: pnpm run build:example
+        run: pnpm run build
         env:
           NODE_ENV: production
 
       - name: Check if build output exists
         run: |
-          if [ ! -d "dist-example" ]; then
+          if [ ! -d "dist" ]; then
             echo "Build output directory does not exist"
             exit 1
           fi
-          if [ ! -f "dist-example/index.html" ]; then
+          if [ ! -f "dist/index.html" ]; then
             echo "index.html not found in build output"
             exit 1
           fi
 
       - name: List build output
-        run: ls -la dist-example/
+        run: ls -la dist/
 
       - name: Deploy to Vercel
         id: deploy

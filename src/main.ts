@@ -8,7 +8,7 @@ import icons from '@/iconify/index.json'
 import directive from '@/utils/directive'
 
 // 引入主题服务
-import { ThemeService } from '@/domains/infrastructure/services/themeService'
+import themeService from '@/domains/infrastructure/services/themeService'
 
 import App from './App.vue'
 import router from './router'

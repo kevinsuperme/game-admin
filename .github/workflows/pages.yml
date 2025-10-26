@@ -30,7 +30,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build application
-        run: pnpm run build:example
+        run: pnpm run build
         env:
           NODE_ENV: production
 
@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist-example
+          path: ./dist
 
       - name: Deploy to GitHub Pages
         id: deployment

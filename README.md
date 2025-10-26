@@ -1,10 +1,10 @@
-# 游戏管理系统
+# Super Admin
 
-基于Vue 3和TypeScript的游戏管理系统，采用领域驱动设计，支持多主题和响应式布局。
+基于Vue 3和TypeScript的中后台管理系统，采用领域驱动设计，支持多主题和响应式布局。
 
 ## 📋 项目概述
 
-这是一个现代化的游戏管理后台系统，采用前后端分离架构，前端使用Vue 3 + TypeScript技术栈，实现了基于领域驱动设计的模块化架构。系统支持多主题切换、响应式布局、权限管理等功能，为游戏运营提供全面的管理支持。
+这是一个现代化的中后台管理系统，采用前后端分离架构，前端使用Vue 3 + TypeScript技术栈，实现了基于领域驱动设计的模块化架构。系统支持多主题切换、响应式布局、权限管理等功能，为企业应用提供全面的管理支持。
 
 ## 🚀 技术栈
 
@@ -56,10 +56,10 @@ src/
 ### 安装依赖
 ```bash
 # 克隆项目
-git clone https://github.com/kevinsuperme/game-admin.git
+git clone https://github.com/kevinsuperme/super-admin.git
 
 # 进入项目目录
-cd game-admin
+cd super-admin
 
 # 安装依赖
 pnpm install
@@ -156,8 +156,8 @@ pnpm preview
 
 ## 📞 联系方式
 
-- 项目链接: [https://github.com/kevinsuperme/game-admin](https://github.com/kevinsuperme/game-admin)
-- 问题反馈: [Issues](https://github.com/kevinsuperme/game-admin/issues)
+- 项目链接: [https://github.com/kevinsuperme/super-admin](https://github.com/kevinsuperme/super-admin)
+- 问题反馈: [Issues](https://github.com/kevinsuperme/super-admin/issues)
 
 ## 🙏 致谢
 

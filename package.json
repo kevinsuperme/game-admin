@@ -1,5 +1,5 @@
 {
-  "name": "fantastic-admin",
+  "name": "super-admin",
   "version": "1.0.0",
   "description": "基于 Vue3、Vite、TypeScript、Element-Plus 的中后台解决方案",
   "author": "Your Name <your.email@example.com>",
@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "build": "vue-tsc -b && vite build",
     "build:example": "vue-tsc -b && vite build --mode example",
     "serve:example": "http-server ./dist-example -o",
     "svgo": "svgo -f src/assets/icons",

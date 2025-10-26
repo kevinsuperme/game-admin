@@ -10,7 +10,7 @@ import type {
   SystemBackup,
   SystemUpdate,
   SystemStats,
-  SystemService,
+  SystemServiceData,
   SystemSecurity,
   SystemMonitoring,
   SystemMaintenance,
@@ -331,16 +331,16 @@ export function getUpdateStatusColor(status: SystemUpdate['status']): string {
 }
 
 // 系统服务相关工具函数
-export function getServiceTypeText(type: SystemService['type']): string {
-  const typeMap: Record<SystemService['type'], string> = {
+export function getServiceTypeText(type: SystemServiceData['type']): string {
+  const typeMap: Record<SystemServiceData['type'], string> = {
     internal: '内部服务',
     external: '外部服务',
   };
   return typeMap[type] || type;
 }
 
-export function getServiceStatusText(status: SystemService['status']): string {
-  const statusMap: Record<SystemService['status'], string> = {
+export function getServiceStatusText(status: SystemServiceData['status']): string {
+  const statusMap: Record<SystemServiceData['status'], string> = {
     running: '运行中',
     stopped: '已停止',
     error: '错误',
@@ -349,8 +349,8 @@ export function getServiceStatusText(status: SystemService['status']): string {
   return statusMap[status] || status;
 }
 
-export function getServiceStatusColor(status: SystemService['status']): string {
-  const colorMap: Record<SystemService['status'], string> = {
+export function getServiceStatusColor(status: SystemServiceData['status']): string {
+  const colorMap: Record<SystemServiceData['status'], string> = {
     running: '#67C23A',
     stopped: '#909399',
     error: '#F56C6C',
@@ -359,8 +359,8 @@ export function getServiceStatusColor(status: SystemService['status']): string {
   return colorMap[status] || '#909399';
 }
 
-export function getServiceHealthText(health: SystemService['health']): string {
-  const healthMap: Record<SystemService['health'], string> = {
+export function getServiceHealthText(health: SystemServiceData['health']): string {
+  const healthMap: Record<SystemServiceData['health'], string> = {
     healthy: '健康',
     unhealthy: '不健康',
     degraded: '降级',
@@ -369,8 +369,8 @@ export function getServiceHealthText(health: SystemService['health']): string {
   return healthMap[health] || health;
 }
 
-export function getServiceHealthColor(health: SystemService['health']): string {
-  const colorMap: Record<SystemService['health'], string> = {
+export function getServiceHealthColor(health: SystemServiceData['health']): string {
+  const colorMap: Record<SystemServiceData['health'], string> = {
     healthy: '#67C23A',
     unhealthy: '#F56C6C',
     degraded: '#E6A23C',
@@ -476,11 +476,11 @@ export function getErrorRateColor(errorRate: number): string {
   return '#F56C6C';
 }
 
-export function isSystemHealthy(services: SystemService[]): boolean {
+export function isSystemHealthy(services: SystemServiceData[]): boolean {
   return services.every(service => service.health === 'healthy');
 }
 
-export function getSystemHealthStatus(services: SystemService[]): 'healthy' | 'degraded' | 'unhealthy' {
+export function getSystemHealthStatus(services: SystemServiceData[]): 'healthy' | 'degraded' | 'unhealthy' {
   const healthyCount = services.filter(service => service.health === 'healthy').length;
   const totalCount = services.length;
   

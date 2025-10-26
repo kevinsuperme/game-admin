@@ -9,7 +9,7 @@ import { toast } from 'vue-sonner'
 
 const files1 = ref<FileItem[]>([])
 const files2 = ref<FileItem[]>([
-  { name: 'logo.svg', size: 1024 * 1024, url: 'https://fantastic-admin.hurui.me/logo.svg' },
+  { name: 'logo.svg', size: 1024 * 1024, url: 'https://super-admin.hurui.me/logo.svg' },
 ])
 
 function handleSuccess() {

@@ -118,15 +118,6 @@ function setupRoutes(router: Router) {
           const globalErrorHandler = await import('@/domains/infrastructure/error').then(m => m.default);
           if (errorType === 'network') {
             globalErrorHandler.handleNetworkError(error, { context: '权限获取' });
-            // 网络错误不强制登出，而是显示错误提示
-            const settingsStore = useSettingsStore();
-            settingsStore.$patch({
-              system: {
-                ...settingsStore.system,
-                networkError: true,
-                errorMessage: '网络连接失败，请检查网络设置后重试'
-              }
-            });
             // 继续尝试路由导航，但可能会因为权限缺失而失败
             next({
               path: to.path,

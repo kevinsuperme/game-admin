@@ -201,6 +201,7 @@ export function useUserAccount() {
 
 // 综合用户管理组合式函数
 export function useUser() {
+  const userStore = useUserStore();
   const userProfile = useUserProfile();
   const userPreferences = useUserPreferences();
   const userActivities = useUserActivities();

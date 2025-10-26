@@ -1,6 +1,9 @@
 // 用户域类型定义
 import type { User } from '@/domains/auth/types';
 
+// 重新导出User类型
+export type { User } from '@/domains/auth/types';
+
 // 用户基本信息
 export interface UserProfile extends User {
   avatar?: string;
@@ -10,6 +13,9 @@ export interface UserProfile extends User {
   birthday?: string;
   gender?: 'male' | 'female' | 'other';
   preferences?: UserPreferences;
+  nickname?: string;
+  realName?: string;
+  username?: string;
 }
 
 // 用户偏好设置

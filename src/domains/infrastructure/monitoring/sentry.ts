@@ -29,7 +29,7 @@ export function initSentry(
     app,
     dsn: config.dsn,
     environment: config.environment,
-    release: config.release || `fantastic-admin@${import.meta.env.VITE_APP_VERSION}`,
+    release: config.release || `super-admin@${import.meta.env.VITE_APP_VERSION}`,
     
     // 性能监控
     integrations: [

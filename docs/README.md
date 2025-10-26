@@ -86,6 +86,6 @@
 
 ## 📖 相关资源
 
-- [项目仓库](https://github.com/your-org/fantastic-admin)
-- [在线演示](https://demo.fantastic-admin.com)
-- [问题反馈](https://github.com/your-org/fantastic-admin/issues)
+- [项目仓库](https://github.com/your-org/super-admin)
+- [在线演示](https://demo.super-admin.com)
+- [问题反馈](https://github.com/your-org/super-admin/issues)

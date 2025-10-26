@@ -28,13 +28,13 @@ onMounted(() => {
     faNotification({
       title: '「 五周年庆，全年最低价 」',
       description: h('div', {
-        innerHTML: ` <p>为庆祝 Fantastic-admin 正式发布五周年，我们在 <b>2025/09/17 - 2025/10/17</b> 期间推出一系列优惠。</p>`,
+        innerHTML: ` <p>为庆祝 Super-admin 正式发布五周年，我们在 <b>2025/09/17 - 2025/10/17</b> 期间推出一系列优惠。</p>`,
       }),
       action: createVNode(FaButton, {
         innerHTML: '查看详情',
         variant: 'destructive',
         onClick: () => {
-          window.open('https://fantastic-admin.hurui.me/buy-anniversary.html', '_blank')
+          window.open('https://super-admin.hurui.me/buy-anniversary.html', '_blank')
         },
       }),
       duration: 0,
@@ -57,46 +57,46 @@ onUnmounted(() => {
           为了视觉风格统一，同时也能服务于更多开发者，本框架从 v4 版本开始，与 Element Plus 组件库进行了解耦，意味着可以轻松将 Element Plus 组件库替换成其他 UI 组件库，并且不会影响框架原本的功能。
         </div>
         <div class="mt-4 flex-col-center gap-2">
-          <FaButton variant="outline" class="w-full" @click="open('https://fantastic-admin.hurui.me/antd-example/')">
+          <FaButton variant="outline" class="w-full" @click="open('https://super-admin.hurui.me/antd-example/')">
             <FaIcon name="https://aliyuncdn.antdv.com/favicon.ico" />
             访问 Ant Design Vue 演示站
           </FaButton>
-          <FaButton variant="outline" class="w-full" @click="open('https://fantastic-admin.hurui.me/arco-example/')">
+          <FaButton variant="outline" class="w-full" @click="open('https://super-admin.hurui.me/arco-example/')">
             <FaIcon name="https://unpkg.byted-static.com/latest/byted/arco-config/assets/favicon.ico" />
             访问 Arco Design Vue 演示站
           </FaButton>
-          <FaButton variant="outline" class="w-full" @click="open('https://fantastic-admin.hurui.me/naive-example/')">
+          <FaButton variant="outline" class="w-full" @click="open('https://super-admin.hurui.me/naive-example/')">
             <FaIcon name="i-logos:naiveui" />
             访问 Naive UI 演示站
           </FaButton>
-          <FaButton variant="outline" class="w-full" @click="open('https://fantastic-admin.hurui.me/tdesign-example/')">
+          <FaButton variant="outline" class="w-full" @click="open('https://super-admin.hurui.me/tdesign-example/')">
             <FaIcon name="https://static.tdesign.tencent.com/favicon.ico" />
             访问 TDesign 演示站
           </FaButton>
-          <FaButton variant="outline" class="w-full" @click="open('https://fantastic-admin.hurui.me/vexip-example/')">
+          <FaButton variant="outline" class="w-full" @click="open('https://super-admin.hurui.me/vexip-example/')">
             <FaIcon name="https://www.vexipui.com/vexip-ui.svg" />
             访问 Vexip UI 演示站
           </FaButton>
-          <FaButton variant="outline" class="w-full" @click="open('https://fantastic-admin.hurui.me/idux-example/')">
+          <FaButton variant="outline" class="w-full" @click="open('https://super-admin.hurui.me/idux-example/')">
             <FaIcon name="https://idux.site/favicon.ico" />
             访问 iDux 演示站
           </FaButton>
         </div>
       </FaModal>
     </div>
-    <div class="item" @click="open(`https://fantastic-admin.hurui.me/buy.html`)">
+    <div class="item" @click="open(`https://super-admin.hurui.me/buy.html`)">
       <FaIcon name="i-ri:money-cny-box-line" />
       <span class="title">购买<br>专业版</span>
     </div>
-    <div class="item" @click="open('https://github.com/fantastic-admin/basic')">
+    <div class="item" @click="open('https://github.com/super-admin/basic')">
       <FaIcon name="i-ri:code-s-slash-line" />
       <span class="title">下载<br>基础版</span>
     </div>
-    <div class="item" @click="open(`https://fantastic-admin.hurui.me`)">
+    <div class="item" @click="open(`https://super-admin.hurui.me`)">
       <FaIcon name="i-ri:book-read-line" />
       <span class="title">开发<br>文档</span>
     </div>
-    <div class="item" @click="open(`https://fantastic-admin.hurui.me/support.html`)">
+    <div class="item" @click="open(`https://super-admin.hurui.me/support.html`)">
       <FaIcon name="i-ri:message-2-line" />
       <span class="title">技术<br>支持</span>
     </div>

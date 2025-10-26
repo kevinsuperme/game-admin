@@ -6,6 +6,7 @@ const merge = createDefu((obj, key, value) => {
     obj[key] = value
     return true
   }
+  return false
 })
 
 /** 合并对象，并移除不存在的属性 */
@@ -18,6 +19,7 @@ const mergeWithoutUndefinedProps = createDefu((obj, key, value) => {
     obj[key] = value
     return true
   }
+  return false
 })
 
 function isObject(value: any) {

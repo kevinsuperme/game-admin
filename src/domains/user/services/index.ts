@@ -217,9 +217,9 @@ export class UserManagementServiceImpl implements UserManagementService {
     role?: string;
     department?: string;
   }): Promise<ApiResponse<Blob>> {
-    return http.get(`${this.baseURL}/export`, {
+    return http.get(`${this.baseURL}/export`, { 
       params,
-      responseType: 'blob'
+      responseType: 'blob' as any
     });
   }
 

@@ -1,5 +1,6 @@
 import apiUser from '@/api/modules/user'
 import router from '@/router'
+import { tokenService } from '@/domains/shared/services/TokenService'
 
 export const useUserStore = defineStore(
   // 唯一ID
@@ -11,14 +12,11 @@ export const useUserStore = defineStore(
     const tabbarStore = useTabbarStore()
 
     const account = ref(localStorage.account ?? '')
-    const token = ref(localStorage.token ?? '')
+    const token = ref(tokenService.getAccessToken() ?? '')
     const avatar = ref(localStorage.avatar ?? '')
     const permissions = ref<string[]>([])
     const isLogin = computed(() => {
-      if (token.value) {
-        return true
-      }
-      return false
+      return tokenService.hasValidToken()
     })
 
     // 登录
@@ -27,9 +25,18 @@ export const useUserStore = defineStore(
       password: string
     }) {
       const res = await apiUser.login(data)
+      
+      // 使用TokenService管理Token
+      tokenService.setToken({
+        token: res.data.token,
+        refreshToken: res.data.refreshToken,
+        expiresAt: res.data.expiresAt ? new Date(res.data.expiresAt).getTime() : undefined,
+      })
+      
+      // 持久化用户信息
       localStorage.setItem('account', res.data.account)
-      localStorage.setItem('token', res.data.token)
       localStorage.setItem('avatar', res.data.avatar)
+      
       account.value = res.data.account
       token.value = res.data.token
       avatar.value = res.data.avatar
@@ -37,9 +44,10 @@ export const useUserStore = defineStore(
 
     // 手动登出
     function logout(redirect = router.currentRoute.value.fullPath) {
-      // 此处仅清除计算属性 isLogin 中判断登录状态过期的变量，以保证在弹出登录窗口模式下页面展示依旧正常
-      localStorage.removeItem('token')
+      // 使用TokenService清除Token
+      tokenService.clearToken()
       token.value = ''
+      
       router.push({
         name: 'login',
         query: {
@@ -47,11 +55,13 @@ export const useUserStore = defineStore(
         },
       }).then(logoutCleanStatus)
     }
+    
     // 请求登出
     function requestLogout() {
-      // 此处仅清除计算属性 isLogin 中判断登录状态过期的变量，以保证在弹出登录窗口模式下页面展示依旧正常
-      localStorage.removeItem('token')
+      // 使用TokenService清除Token
+      tokenService.clearToken()
       token.value = ''
+      
       router.push({
         name: 'login',
         query: {

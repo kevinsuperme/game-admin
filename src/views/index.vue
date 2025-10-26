@@ -31,12 +31,12 @@ const fantasticAdminInfo = ref({
   imageVisible: false,
   index: 0,
   data: [
-    'https://your-company-website.com/preview1.png',
-    'https://your-company-website.com/preview2.png',
-    'https://your-company-website.com/preview3.png',
-    'https://your-company-website.com/preview4.png',
-    'https://your-company-website.com/preview5.png',
-    'https://your-company-website.com/preview6.png',
+    'https://super-admin.hurui.me/preview1.png',
+    'https://super-admin.hurui.me/preview2.png',
+    'https://super-admin.hurui.me/preview3.png',
+    'https://super-admin.hurui.me/preview4.png',
+    'https://super-admin.hurui.me/preview5.png',
+    'https://super-admin.hurui.me/preview6.png',
   ],
 })
 
@@ -83,15 +83,15 @@ function open(url: string) {
         </div>
       </template>
       <div class="flex gap-2">
-        <FaButton variant="outline" @click="open('https://your-company-website.com')">
+        <FaButton variant="outline" @click="open('https://super-admin.hurui.me')">
           <FaIcon name="i-ri:file-text-line" />
           开发文档
         </FaButton>
         <FaDropdown
           :items="[
             [
-              { label: 'Github', icon: 'i-simple-icons:github', handle: () => open('https://github.com/fantastic-admin/basic') },
-              { label: 'Gitee', icon: 'i-simple-icons:gitee', handle: () => open('https://gitee.com/fantastic-admin/basic') },
+              { label: 'Github', icon: 'i-simple-icons:github', handle: () => open('https://github.com/super-admin/basic') },
+              { label: 'Gitee', icon: 'i-simple-icons:gitee', handle: () => open('https://gitee.com/super-admin/basic') },
             ],
           ]"
         >
@@ -110,7 +110,7 @@ function open(url: string) {
             <img src="https://cn.vuejs.org/logo.svg">
             <div>
               <h1 class="c-[#41b883]">
-                Fantastic-startkit
+                Super-startkit
               </h1>
               <h2>一款简单好用的 Vue3 项目启动套件</h2>
             </div>
@@ -129,17 +129,17 @@ function open(url: string) {
       </FaPageMain>
       <FaPageMain class="m-0 flex-1" title-class="flex flex-wrap items-center justify-between gap-4">
         <template #title>
-          <div class="title-info">
-            <img src="https://your-company-website.com/logo.svg">
-            <div>
-              <h1 class="c-[#41b883]">
-                Your Company
-              </h1>
-              <h2>一款开箱即用的 Vue 中后台管理系统框架</h2>
+            <div class="title-info">
+              <img src="https://super-admin.hurui.me/logo.svg">
+              <div>
+                <h1 class="c-[#41b883]">
+                  Super-admin
+                </h1>
+                <h2>一款开箱即用的 Vue 中后台管理系统框架</h2>
+              </div>
             </div>
-          </div>
           <div class="ms-auto">
-            <FaButton @click="open('https://your-company-website.com')">
+            <FaButton @click="open('https://super-admin.hurui.me')">
               访问官网
             </FaButton>
           </div>

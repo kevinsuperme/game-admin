@@ -11,7 +11,7 @@ import type {
   SystemBackup,
   SystemUpdate,
   SystemStats,
-  SystemService,
+  SystemServiceData,
   SystemSecurity,
   SystemMonitoring,
   SystemMaintenance,
@@ -459,6 +459,37 @@ export const useSystemStore = defineStore('system', {
       }
     },
     
+    async getSystemService(id: string): Promise<SystemServiceData> {
+      try {
+        return await systemService.getSystemService(id);
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : '获取系统服务详情失败';
+        throw error;
+      }
+    },
+    
+    async updateSystemService(id: string, service: Partial<SystemServiceData>): Promise<void> {
+      try {
+        await systemService.updateSystemService(id, service);
+        // 重新获取服务
+        await this.fetchSystemServices();
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : '更新系统服务失败';
+        throw error;
+      }
+    },
+    
+    async deleteSystemService(id: string): Promise<void> {
+      try {
+        await systemService.deleteSystemService(id);
+        // 重新获取服务
+        await this.fetchSystemServices();
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : '删除系统服务失败';
+        throw error;
+      }
+    },
+    
     async restartSystemService(id: string): Promise<void> {
       try {
         await systemService.restartSystemService(id);
@@ -554,6 +585,30 @@ export const useSystemStore = defineStore('system', {
         this.systemMaintenance = await systemService.updateSystemMaintenance(maintenance);
       } catch (error) {
         this.error = error instanceof Error ? error.message : '更新系统维护状态失败';
+        throw error;
+      }
+    },
+    
+    // 系统设置
+    async updateSystemSettings(settings: any): Promise<void> {
+      try {
+        await systemService.updateSystemConfig(settings);
+        // 重新获取系统配置
+        await this.fetchSystemConfig();
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : '更新系统设置失败';
+        throw error;
+      }
+    },
+    
+    // 更新设置
+    async updateUpdateSettings(settings: any): Promise<void> {
+      try {
+        // 这里可以添加更新设置的逻辑
+        // 目前先模拟成功
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : '更新更新设置失败';
         throw error;
       }
     },

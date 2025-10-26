@@ -9,7 +9,7 @@ export default defineFakeRoute([
         error: '',
         status: 1,
         data: {
-          url: 'https://fantastic-admin.hurui.me/logo.svg',
+          url: 'https://super-admin.hurui.me/logo.svg',
         },
       }
     },

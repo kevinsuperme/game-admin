@@ -373,11 +373,11 @@ export function filterUsers(users: User[], keyword: string): User[] {
   
   return users.filter(user => {
     return (
-      user.username.toLowerCase().includes(lowerKeyword) ||
-      user.email.toLowerCase().includes(lowerKeyword) ||
+      (user.username && user.username.toLowerCase().includes(lowerKeyword)) ||
+      (user.email && user.email.toLowerCase().includes(lowerKeyword)) ||
       (user as UserProfile).nickname?.toLowerCase().includes(lowerKeyword) ||
       (user as UserProfile).realName?.toLowerCase().includes(lowerKeyword) ||
-      user.phone?.toLowerCase().includes(lowerKeyword)
+      (user.phone && user.phone.toLowerCase().includes(lowerKeyword))
     );
   });
 }
@@ -390,24 +390,24 @@ export function sortUsers(users: User[], sortBy: string, sortOrder: 'asc' | 'des
     
     switch (sortBy) {
       case 'username':
-        aValue = a.username;
-        bValue = b.username;
+        aValue = a.username || '';
+        bValue = b.username || '';
         break;
       case 'email':
-        aValue = a.email;
-        bValue = b.email;
+        aValue = a.email || '';
+        bValue = b.email || '';
         break;
       case 'createTime':
-        aValue = new Date(a.createTime).getTime();
-        bValue = new Date(b.createTime).getTime();
+        aValue = a.createTime ? new Date(a.createTime).getTime() : 0;
+        bValue = b.createTime ? new Date(b.createTime).getTime() : 0;
         break;
       case 'lastLoginTime':
         aValue = a.lastLoginTime ? new Date(a.lastLoginTime).getTime() : 0;
         bValue = b.lastLoginTime ? new Date(b.lastLoginTime).getTime() : 0;
         break;
       default:
-        aValue = a.username;
-        bValue = b.username;
+        aValue = a.username || '';
+        bValue = b.username || '';
     }
     
     if (aValue < bValue) {

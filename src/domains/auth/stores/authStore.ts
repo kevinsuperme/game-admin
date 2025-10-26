@@ -2,13 +2,14 @@ import { defineStore } from 'pinia';
 import type { AuthState, User, LoginCredentials, PasswordChangeData } from '../types';
 import { authService } from '../services/authService';
 import type { AuthErrorCode } from '../types';
+import { tokenService } from '@/domains/shared/services/TokenService';
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     isAuthenticated: false,
     user: null,
-    token: localStorage.getItem('token') || null,
-    refreshToken: localStorage.getItem('refreshToken') || null,
+    token: tokenService.getAccessToken(),
+    refreshToken: tokenService.getRefreshToken(),
     permissions: JSON.parse(localStorage.getItem('permissions') || '[]'),
     isLoading: false,
     error: null,
@@ -44,11 +45,14 @@ export const useAuthStore = defineStore('auth', {
         this.refreshToken = result.refreshToken || null;
         this.permissions = result.user.permissions;
         
-        // 持久化存储
-        localStorage.setItem('token', result.token);
-        if (result.refreshToken) {
-          localStorage.setItem('refreshToken', result.refreshToken);
-        }
+        // 使用TokenService管理Token
+        tokenService.setToken({
+          token: result.token,
+          refreshToken: result.refreshToken,
+          expiresAt: result.expiresAt ? new Date(result.expiresAt).getTime() : undefined,
+        });
+        
+        // 持久化权限
         localStorage.setItem('permissions', JSON.stringify(result.user.permissions));
       } catch (error: any) {
         this.error = error.message;
@@ -87,11 +91,14 @@ export const useAuthStore = defineStore('auth', {
         this.refreshToken = result.refreshToken || null;
         this.permissions = result.user.permissions;
         
-        // 更新持久化存储
-        localStorage.setItem('token', result.token);
-        if (result.refreshToken) {
-          localStorage.setItem('refreshToken', result.refreshToken);
-        }
+        // 使用TokenService更新Token
+        tokenService.setToken({
+          token: result.token,
+          refreshToken: result.refreshToken,
+          expiresAt: result.expiresAt ? new Date(result.expiresAt).getTime() : undefined,
+        });
+        
+        // 更新持久化权限
         localStorage.setItem('permissions', JSON.stringify(result.user.permissions));
       } catch (error: any) {
         // 刷新令牌失败，清除认证状态
@@ -139,17 +146,37 @@ export const useAuthStore = defineStore('auth', {
       this.permissions = [];
       this.error = null;
       
-      // 清除持久化存储
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      // 使用TokenService清除Token
+      tokenService.clearToken();
+      
+      // 清除持久化权限
       localStorage.removeItem('permissions');
     },
 
     initializeAuth(): void {
-      if (this.token) {
+      // 从TokenService恢复Token状态
+      const token = tokenService.getAccessToken();
+      if (token) {
+        this.token = token;
+        this.refreshToken = tokenService.getRefreshToken();
         this.isAuthenticated = true;
-        // 这里可以添加令牌验证逻辑
+        
+        // 监听Token刷新事件
+        this.setupTokenRefreshListener();
       }
+    },
+    
+    setupTokenRefreshListener(): void {
+      // 监听TokenService发出的刷新事件
+      window.addEventListener('token:refresh-needed', async () => {
+        try {
+          await this.refreshAuthToken();
+        } catch (error) {
+          console.error('[AuthStore] Auto token refresh failed:', error);
+          // 刷新失败,清除认证状态
+          this.clearAuthState();
+        }
+      });
     },
 
     setError(error: { code: AuthErrorCode; message: string }): void {

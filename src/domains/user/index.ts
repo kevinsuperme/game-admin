@@ -13,9 +13,6 @@ export type {
   UserState,
   UserActivity,
   UserStats,
-  UserService,
-  UserManagementService,
-  UserStore,
 } from './types';
 
 // 服务层

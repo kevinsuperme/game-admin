@@ -31,6 +31,21 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }))
 
+// Mock Vue Router
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    go: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  }),
+  useRoute: () => ({
+    path: '/login',
+    query: {},
+  }),
+}))
+
 // Configure Vue Test Utils
 config.global.mocks = {
   $t: (key: string) => key,
